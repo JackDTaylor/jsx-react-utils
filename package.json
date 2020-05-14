@@ -1,5 +1,5 @@
 {
-  "name": "jsx-toolkit",
+  "name": "jsx-react-utils",
   "version": "1.0.0",
   "description": "JS and React overhaul",
   "main": "common.jsx",
