@@ -1,6 +1,4 @@
 export default (cfg) => {
-	const {reactComponentPrefix} = cfg;
-
 	const USE_NEW_LIFECYCLE_METHODS = (([major, minor]) => {
 		// noinspection JSValidateTypes
 		return major > 16 || (major == 16 && minor >= 9)
