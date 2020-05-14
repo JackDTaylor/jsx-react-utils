@@ -1,5 +1,5 @@
-export default () => {
-	const {reactComponentPrefix} = this.cfg;
+export default (cfg) => {
+	const {reactComponentPrefix} = cfg;
 
 	const USE_NEW_LIFECYCLE_METHODS = (([major, minor]) => {
 		// noinspection JSValidateTypes
@@ -23,7 +23,7 @@ export default () => {
 		} else if(isComponent) {
 			cls = cls.replace(camelHumpRegex, '$1-$2');
 			cls = cls.toLowerCase();
-			cls = `${reactComponentPrefix}-${cls}`;
+			cls = `${ReactComponentPrefix}-${cls}`;
 		}
 
 		return cls;
@@ -156,12 +156,12 @@ export default () => {
 			}
 
 			const result = {
-				className: reactComponentPrefix + ' ' + (
+				className: ReactComponentPrefix + ' ' + (
 					this.cssClass
-						.map(componentClassname)                          // Convert `SomeClass` to `{reactComponentPrefix}-some-class`
+						.map(componentClassname)                          // Convert `SomeClass` to `{ReactComponentPrefix}-some-class`
 						.concat(additionalClasses)                        // Add `additionalClasses`
 						.concat([this.props.className])                   // Add `props.className`
-						.filter(x=>x && x.trim() != reactComponentPrefix) // Remove empty classes and `reactComponentPrefix` occurrences
+						.filter(x=>x && x.trim() != ReactComponentPrefix) // Remove empty classes and `ReactComponentPrefix` occurrences
 						.unique()                                         // Remove duplicates
 						.join(' ')                                        // Join everything into a string
 						.replace(/\s+/, ' ')                              // Collapse spaces
@@ -321,7 +321,7 @@ export default () => {
 		asyncPromise = null;
 
 		renderAsyncLoader() {
-			return <div className={`${reactComponentPrefix} ${reactComponentPrefix}-block-loader`} />;
+			return <div className={`${ReactComponentPrefix} ${ReactComponentPrefix}-block-loader`} />;
 		}
 
 		_callPrepare() {
