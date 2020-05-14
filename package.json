@@ -1,0 +1,23 @@
+{
+  "name": "jsx-toolkit",
+  "version": "1.0.0",
+  "description": "JS and React overhaul",
+  "main": "common.jsx",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JackDTaylor/jsx-react-overhaul.git"
+  },
+  "keywords": [
+    "jsx",
+    "react",
+    "es6",
+    "js",
+    "utils"
+  ],
+  "author": "Jack D. Taylor",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JackDTaylor/jsx-react-overhaul/issues"
+  },
+  "homepage": "https://github.com/JackDTaylor/jsx-react-overhaul#readme"
+}
