@@ -16,7 +16,7 @@ export default () => {
 			initialValue = config.value;
 		}
 
-		console.log('Proto UID', field, ObjectUID(proto), proto);
+		// console.log('Proto UID', field, ObjectUID(proto), proto);
 
 		let originalCWU = proto.componentWillUnmount || (() => {});
 

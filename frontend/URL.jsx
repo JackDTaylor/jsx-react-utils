@@ -10,7 +10,7 @@ export default () => {
 
 	(original => {
 		jQuery.globalEval = function(code, doc, node) {
-			console.log('globalEval', [...arguments]);
+			// console.log('globalEval', [...arguments]);
 
 			if(code[0] == '{') {
 				// Possibly a JSON, make it somewhat executable (to not throw an error atleast)

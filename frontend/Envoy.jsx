@@ -140,7 +140,7 @@ export default () => {
 		receive(message) {
 			if(!message.data || !message.data.$envoy) {
 				if(this.logForeignRequests) {
-					console.log('Received foreign message', message);
+					console.log('Envoy: Received foreign message', message);
 				}
 
 				return;

@@ -4,7 +4,7 @@ export default () => {
 
 	global.keys = Object.keys;
 
-	console.log("Including react");
+	// console.log("Including react");
 	global.React = global.React || global.JsxUtilsDependencies["react"];
 
 	global.compare = function(a, b) {
