@@ -1,6 +1,6 @@
-# jsx-utils
+# jsx-react-utils
 
-**JSX Utils** is a library that overhauls a lot of things in JS and React
+**JSX/React Utils** is a library that overhauls a lot of things in JS and React
 
 ## Installation and dependencies
 You need to provide default exports for the following modules (you should require them by yourself) like  this:
