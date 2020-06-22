@@ -1,11 +1,11 @@
 {
   "name": "jsx-react-utils",
   "version": "1.0.6",
-  "description": "JS and React overhaul",
+  "description": "JS and React utils",
   "main": "common.jsx",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/JackDTaylor/jsx-react-overhaul.git"
+    "url": "git+https://github.com/JackDTaylor/jsx-react-utils.git"
   },
   "keywords": [
     "jsx",
@@ -17,7 +17,7 @@
   "author": "Jack D. Taylor",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/JackDTaylor/jsx-react-overhaul/issues"
+    "url": "https://github.com/JackDTaylor/jsx-react-utils/issues"
   },
-  "homepage": "https://github.com/JackDTaylor/jsx-react-overhaul#readme"
+  "homepage": "https://github.com/JackDTaylor/jsx-react-utils#readme"
 }
