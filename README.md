@@ -8,9 +8,11 @@ Install library from NPM using following command:
 ```npm install jsx-react-utils --save```
 
 ### Usage
-| Important note! | 
-|---|
-| You should not include anything that requires this library in definition (e.g. classes extending `ReactComponent`), since `jsx-react-utils` does not define anything until you call initializer function. This may lead to `ReferenceError: ReactComponent is not defined`, which means that you're trying to use `jsx-react-utils` before it has been initialized.<br><br>Easiest way so solve it is to place `jsx-react-utils` imports and initialization into a separate file and include it before your component imports. See example below. |
+#### Important note!
+
+You should not import anything that requires this library in definition (e.g. classes extending `ReactComponent`), since `jsx-react-utils` does not define anything until you call its initializer function. This may lead to `ReferenceError: ReactComponent is not defined`, which means that you're trying to use `jsx-react-utils` before it has been initialized.
+
+The easiest way so solve this is to place `jsx-react-utils` imports and initialization into a separate file and include it before your component imports. See example below:
 
 **jsx-react-utils.jsx**:
 ```js
@@ -66,3 +68,13 @@ Features which require particular packages are described below:
 - **jquery**      &ndash; Required only for `URL.fetch` and `URL.fetchRaw` functions.
 - **querystring** &ndash; Required only for `URL.build` and `URL.parseQuery` functions.
 - **file-saver**  &ndash; Required only for `FileModel.download` method. You may pass your own function of the same signature.
+
+### Modules
+#### common
+This module can be used both in backend and frontend environment.
+
+#### frontend
+This module is supposed to be used in frontend environment, but you can use it on backend as well (e.g. in universal/isomorphic application), just make sure to pass React dependency.
+
+### Documentation
+Sadly, no documentation yet :c
