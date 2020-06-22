@@ -1,30 +1,68 @@
 # jsx-react-utils
 
-**JSX/React Utils** is a library that overhauls a lot of things in JS and React
+**JSX/React Utils** is a library that overhauls a lot of things in JS and React.
 
-## Installation and dependencies
-You need to provide default exports for the following modules (you should require them by yourself) like  this:
+### Installation
+Install library from NPM using following command:
+
+```npm install jsx-react-utils --save```
+
+### Usage
+| Important note! | 
+|---|
+| You should not include anything that requires this library in definition (e.g. classes extending `ReactComponent`), since `jsx-react-utils` does not define anything until you call initializer function. This may lead to `ReferenceError: ReactComponent is not defined`, which means that you're trying to use `jsx-react-utils` before it has been initialized.<br><br>Easiest way so solve it is to place `jsx-react-utils` imports and initialization into a separate file and include it before your component imports. See example below. |
+
+**jsx-react-utils.jsx**:
 ```js
-import fileSaver from "file-saver";
+import initCommon from "jsx-react-utils/common";
+import initFrontend from "jsx-react-utils/frontend";
+
+initCommon({/* Dependencies go here */});
+initFrontend({/* Dependencies go here */});
+```
+
+**your-entry-point.jsx**:
+```js
+import "./jsx-react-utils";
+
+import "./Components/MyComponent";
+import "./Components/MyOtherComponent";
+
+// Your app initialization and ReactDOM.render()
+// ...
+```
+
+### Dependencies 
+You have to provide default exports from the dependent packages. You should import them manually in any way you want,
+e.g. separate `vendor.min.js` file, direct imports like in example below or from your favorite CDN via `<script>` tags.
+
+```js
 import React from "react";
 import Bluebird from "bluebird";
 import jQuery from "jquery";
 import querystring from "querystring";
+import fileSaver from "file-saver";
 
-import jsxUtilsCommon from "jsx-react-utils/common";
-import jsxUtilsFrontend from "jsx-react-utils/frontend";
+import initCommon from "jsx-react-utils/common";
+import initFrontend from "jsx-react-utils/frontend";
 
 (cfg => {
-	jsxUtilsCommon(cfg);
-	jsxUtilsFrontend(cfg);
+	initCommon(cfg);
+	initFrontend(cfg);
 })({
-	"file-saver":  fileSaver,
 	"react":       React,
 	"bluebird":    Bluebird,
 	"jquery":      jQuery,
 	"querystring": querystring,
+	"file-saver":  fileSaver,
 });
 ```
 
-You may pass `null` or an empty/non-empty object if needed. Search this repo for `JsxUtilsDependencies` to see what may
-break if the particular dependency is not provided.
+You can pass `null` or an empty/non-empty object if you don't plan on using corresponding features. 
+
+Features which require particular packages are described below:
+- **react**       &ndash; Essential dependency for `frontend` module. You can omit this dependency if you use `common` module only.
+- **bluebird**    &ndash; Essential for any async functionality both in `common` and `frontend` modules.
+- **jquery**      &ndash; Required only for `URL.fetch` and `URL.fetchRaw` functions.
+- **querystring** &ndash; Required only for `URL.build` and `URL.parseQuery` functions.
+- **file-saver**  &ndash; Required only for `FileModel.download` method. You may pass your own function of the same signature.
