@@ -108,6 +108,10 @@ export default () => {
 	 * @returns {boolean}
 	 */
 	global.isPromise = function(value) {
-		return value instanceof global.Bluebird || value instanceof Promise;
+		if(global.Bluebird && value instanceof global.Bluebird) {
+			return true;
+		}
+
+		return value instanceof Promise;
 	};
 }

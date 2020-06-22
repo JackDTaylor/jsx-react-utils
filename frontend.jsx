@@ -6,11 +6,7 @@ import frontend_Reactified     from "./frontend/Reactified";
 import frontend_URL            from "./frontend/URL";
 import frontend_Envoy          from "./frontend/Envoy";
 
-export default (dependencies) => {
-	if(typeof dependencies == "undefined") {
-		throw new Error("You need to provide an object with dependencies lister in README.md");
-	}
-
+export default (dependencies = {}) => {
 	global.JsxUtilsDependencies = {
 		...global.JsxUtilsDependencies,
 		...dependencies,
@@ -20,12 +16,7 @@ export default (dependencies) => {
 	frontend_Classnames();
 	frontend_Decorators();
 	frontend_ReactComponent();
-
-	frontend_Reactified_Promise();
-	frontend_Reactified_Array();
-	frontend_Reactified_Hooks();
-	frontend_Reactified_Object();
-
+	frontend_Reactified();
 	frontend_URL();
 	frontend_Envoy();
 };

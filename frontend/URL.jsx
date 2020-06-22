@@ -8,18 +8,20 @@ export default () => {
 
 	let urlParser = document.createElement('a');
 
-	(original => {
-		jQuery.globalEval = function(code, doc, node) {
-			// console.log('globalEval', [...arguments]);
+	if(jQuery) {
+		// Override jQuery.globalEval to fix issues with JSON responses
 
-			if(code[0] == '{') {
-				// Possibly a JSON, make it somewhat executable (to not throw an error atleast)
-				code = '(' + code + ')';
-			}
+		(original => {
+			jQuery.globalEval = function(code, doc, node) {
+				if(code[0] == '{') {
+					// Possibly a JSON, make it somewhat executable (to not throw an error atleast)
+					code = '(' + code + ')';
+				}
 
-			return original.apply(this, [code, doc, node]);
-		};
-	})(jQuery.globalEval);
+				return original.apply(this, [code, doc, node]);
+			};
+		})(jQuery.globalEval);
+	}
 
 
 	class URLData {
@@ -73,16 +75,25 @@ export default () => {
 	window.URL.parse = function parse(url) {
 		return new URLData(url);
 	};
+
 	window.URL.clean = function parse(url) {
 		return '/' + url.trim('/').replace(/\/+/g, '/');
 	};
 
 
 	window.URL.build = function(baseUrl, params) {
+		if(!querystring) {
+			throw new Error("[jsx-react-utils] `querystring` dependency is required for `URL.build()`");
+		}
+
 		return `${baseUrl}?${querystring.stringify(params)}`;
 	};
 
 	window.URL.parseQuery = function(query) {
+		if(!querystring) {
+			throw new Error("[jsx-react-utils] `querystring` dependency is required for `URL.parseQuery()`");
+		}
+
 		return querystring.parse(query);
 	};
 
@@ -91,6 +102,10 @@ export default () => {
 	const successStatuses = ['notmodified', 'success'];
 
 	window.URL.fetch = function(url, method, body, outputFormat = 'json') {
+		if(!jQuery) {
+			throw new Error("[jsx-react-utils] `jquery` dependency is required for `URL.fetchRaw()`");
+		}
+
 		const handler = function(resolve, reject, onCancel) {
 				let request = null;
 
@@ -177,6 +192,10 @@ export default () => {
 	};
 
 	window.URL.fetchRaw = function(url, method, data, config = {}) {
+		if(!jQuery) {
+			throw new Error("[jsx-react-utils] `jquery` dependency is required for `URL.fetchRaw()`");
+		}
+
 		return new Bluebird(function(resolve, reject, onCancel) {
 			config = {
 				url, method, data,

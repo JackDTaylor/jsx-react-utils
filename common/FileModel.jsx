@@ -84,6 +84,10 @@ export default () => {
 		}
 
 		@frontendOnly download() {
+			if(!saveAs) {
+				throw new Error("[jsx-react-utils] `file-saver` dependency is required for `URL.parseQuery()`");
+			}
+
 			return saveAs(this.asBlob(), this.name);
 		}
 

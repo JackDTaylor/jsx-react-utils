@@ -38,11 +38,7 @@ import common_Errors                    from "./common/Errors";
 import common_Models                    from "./common/Models";
 import common_FileModel                 from "./common/FileModel";
 
-export default (dependencies) => {
-	if(typeof dependencies == "undefined") {
-		throw new Error("You need to provide an object with dependencies lister in README.md");
-	}
-
+export default (dependencies = {}) => {
 	global.JsxUtilsDependencies = {
 		...global.JsxUtilsDependencies,
 		...dependencies,
