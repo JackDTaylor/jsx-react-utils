@@ -2,18 +2,13 @@ export default () => {
 	const DefaultErrorSign = ({error}) => <div className="error">{error.message}</div>;
 	const DefaultLoading   = ()        => <div className="loading" />;
 
-	global.Reactified = global.Reactified || {};
-
-	const ErrorSign = global.Reactified.ErrorSign || DefaultErrorSign;
-	const Loading   = global.Reactified.Loading || DefaultLoading;
-
-	let idCounter = 1;
-	let VOID = { $symbol:'VOID' };
-
-	class PromiseReactRenderer extends React.PureComponent {
+	const DefaultPromiseRenderer = class PromiseReactRenderer extends React.PureComponent {
 		@prop promise;
+
 		@state result = VOID;
 		@state error;
+
+		// state = {};
 
 		isCancelled = false;
 
@@ -52,7 +47,22 @@ export default () => {
 
 			return empty(this.result) ? '' : this.result;
 		}
-	}
+	};
+
+	/**
+	 *
+	 * @type {{ErrorSign,Loading,PromiseRendererGenerator,Link}}
+	 */
+	global.Reactified = global.Reactified || {};
+
+	const optionalCallback = x => x || (x=>x);
+
+	const ErrorSign = optionalCallback(Reactified.ErrorSign)(DefaultErrorSign);
+	const Loading   = optionalCallback(Reactified.Loading)(DefaultLoading);
+	const PromiseRenderer = optionalCallback(Reactified.PromiseRenderer)(DefaultPromiseRenderer);
+
+	let idCounter = 1;
+	let VOID = { $symbol:'VOID' };
 
 	const processedPrototypes = [];
 
@@ -75,7 +85,7 @@ export default () => {
 					return this.value();
 				}
 				// console.warn('Not fulfilled promise', this);
-				return <PromiseReactRenderer promise={this} />;
+				return <PromiseRenderer promise={this} />;
 			}
 		});
 

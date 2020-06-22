@@ -1,11 +1,6 @@
 export default () => {
 	const DefaultLink = ({target, children}) => <a onClick={target}>{children}</a>;
-
-	global.Reactified = global.Reactified || {};
-
-	const Link = Reactified.Link || DefaultLink;
-
-	class ArrayReactRenderer extends React.Component {
+	const DefaultArrayRenderer = class ArrayReactRenderer extends React.Component {
 		@prop limit = 2;
 		@prop array;
 
@@ -51,26 +46,31 @@ export default () => {
 			const overflow = this.array.length - array.length;
 
 			return (
-				<React.Fragment>
+				<___>
 					{array.map((item, i) => this.displayAsList ? (
 						<div className={`${ReactComponentPrefix}-array-item`} key={i}>{item}</div>
 					) : (
-						<React.Fragment key={i}>
+						<___ key={i}>
 							{item}
 							{this.separator(array.length - i - !overflow)}
-						</React.Fragment>
+						</___>
 					))}
 
 					{this.renderExpandButton(overflow)}
-				</React.Fragment>
+				</___>
 			);
 		}
-	}
+	};
+
+	const optionalCallback = x => x || (x=>x);
+
+	const Link          = optionalCallback(Reactified.Link)(DefaultLink);
+	const ArrayRenderer = optionalCallback(Reactified.ArrayRenderer)(DefaultArrayRenderer);
 
 	Object.defineProperty(Array.prototype, 'toReact', {
 		enumerable: false,
 		value(limit = 2) {
-			return <ArrayReactRenderer array={this} allowExpand expandToList limit={limit} />;
+			return <ArrayRenderer array={this} allowExpand expandToList limit={limit} />;
 		}
 	});
 }
