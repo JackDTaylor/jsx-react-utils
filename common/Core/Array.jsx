@@ -138,7 +138,7 @@ export default () => {
 	/** @class Array
 	 *  @property mapReact */
 	arrayFn('mapReact', function(fn) {
-		return this.map((e, i) => <React.Fragment key={i}>{fn.apply(this, [e, i])}</React.Fragment>)
+		return this.map((e, i) => <___ key={i}>{fn.apply(this, [e, i])}</___>)
 	});
 
 	/** @class Array

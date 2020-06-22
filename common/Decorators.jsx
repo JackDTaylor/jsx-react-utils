@@ -324,9 +324,9 @@ export default () => {
 			const reactifier = this.toReact || (() => <b>[{this.constructor.name}::toReact]</b>);
 
 			yield (
-				<React.Fragment key={0}>
+				<___ key={0}>
 					{reactifier.apply(this)}
-				</React.Fragment>
+				</___>
 			);
 		}
 	};

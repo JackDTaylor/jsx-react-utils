@@ -6,6 +6,7 @@ export default () => {
 
 	// console.log("Including react");
 	global.React = global.React || global.JsxUtilsDependencies["react"];
+	global.___ = global.React && global.React.Fragment;
 
 	global.compare = function(a, b) {
 		if(a == b) {
