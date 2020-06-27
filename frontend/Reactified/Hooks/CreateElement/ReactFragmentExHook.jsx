@@ -1,6 +1,9 @@
+import JsxReactUtils from "../../../../base/JsxReactUtils";
 import AbstractCreateElementHook from "./AbstractCreateElementHook";
 
 export default () => {
+	const React = JsxReactUtils.dependency("react");
+
 	class ReactFragmentEx extends React.PureComponent {
 		static ToString(props) {
 			return props.alt || '[object ReactFragmentEx]';

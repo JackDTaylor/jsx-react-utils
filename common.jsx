@@ -1,3 +1,5 @@
+import JsxReactUtils from "./base/JsxReactUtils";
+
 import common_Constants                 from "./common/Constants";
 
 import common_Utils_Range               from "./common/Utils/Range";
@@ -38,48 +40,57 @@ import common_Errors                    from "./common/Errors";
 import common_Models                    from "./common/Models";
 import common_FileModel                 from "./common/FileModel";
 
-export default (dependencies = {}) => {
-	global.JsxUtilsDependencies = {
-		...global.JsxUtilsDependencies,
-		...dependencies,
-	};
+export default (config = {}) => {
+	JsxReactUtils.addConfig(config);
 
-	common_Constants();
-	common_Utils_Range();
-	common_Utils_Random();
-	common_Utils_Colorizer();
-	common_Utils_Animate();
-	common_Utils_Geometry();
-	common_Utils_Geometry2D();
-	common_Utils_Plural();
-	common_Utils_CycleSafety();
-	common_Utils_Throttler();
-	common_Utils_Geo();
-	common_Utils_KeyboardLayout();
-	common_Utils_ClassUtils();
+	JsxReactUtils.require([
+		common_Constants,
+		common_Utils_Range,
+		common_Utils_Random,
+		common_Utils_Colorizer,
+		common_Utils_Animate,
+		common_Utils_Geometry,
+		common_Utils_Geometry2D,
+		common_Utils_Plural,
+		common_Utils_CycleSafety,
+		common_Utils_Throttler,
+		common_Utils_Geo,
+		common_Utils_KeyboardLayout,
+		common_Utils_ClassUtils,
+	]);
 
-	common_Fixes();
-	common_Types();
+	JsxReactUtils.require([
+		common_Fixes,
+		common_Types,
+	]);
 
-	common_Async();
-	common_Decorators();
-	common_Validators();
+	JsxReactUtils.require([
+		common_Async,
+		common_Decorators,
+		common_Validators,
+	]);
 
-	common_Core_Object();
-	common_Core_Function();
-	common_Core_Number();
-	common_Core_String();
-	common_Core_StringCrypt();
-	common_Core_Array();
-	common_Core_Date();
-	common_Core_JSON();
-	common_Core_RegExp();
-	common_Core_Math();
+	// Core
+	JsxReactUtils.require([
+		common_Core_Object,
+		common_Core_Function,
+		common_Core_Number,
+		common_Core_String,
+		common_Core_StringCrypt,
+		common_Core_Array,
+		common_Core_Date,
+		common_Core_JSON,
+		common_Core_RegExp,
+		common_Core_Math,
+	]);
 
-	common_Errors();
-	common_Models();
-	common_FileModel();
-	common_Utils_CacheStorage();
-	common_Utils_Noun();
-	common_Utils_Helpers_PhoneHelper();
+	// Misc
+	JsxReactUtils.require([
+		common_Errors,
+		common_Models,
+		common_FileModel,
+		common_Utils_CacheStorage,
+		common_Utils_Noun,
+		common_Utils_Helpers_PhoneHelper,
+	]);
 };

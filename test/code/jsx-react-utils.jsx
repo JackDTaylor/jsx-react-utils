@@ -1,19 +1,12 @@
-import jsxUtilsCommon from "../../common";
-import jsxUtilsFrontend from "../../frontend";
+import jsxReactUtils from "../../index";
+import {React, Bluebird, jQuery, querystring, fileSaver} from "./vendor";
 
-import fileSaver from "file-saver";
-import React from "react";
-import Bluebird from "bluebird";
-import jQuery from "jquery";
-import querystring from "querystring";
-
-(cfg => {
-	jsxUtilsCommon(cfg);
-	jsxUtilsFrontend(cfg);
-})({
-	"file-saver":  fileSaver,
-	"react":       React,
-	"bluebird":    Bluebird,
-	"jquery":      jQuery,
-	"querystring": querystring,
+jsxReactUtils(['common', 'frontend'], {
+	dependencies: {
+		"file-saver":  fileSaver,
+		"react":       React,
+		"bluebird":    Bluebird,
+		"jquery":      jQuery,
+		"querystring": querystring,
+	}
 });

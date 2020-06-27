@@ -2,7 +2,7 @@
   "name": "jsx-react-utils",
   "version": "1.0.7",
   "description": "JS and React utils",
-  "main": "common.jsx",
+  "main": "index.jsx",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/JackDTaylor/jsx-react-utils.git"

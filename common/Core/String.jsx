@@ -2,6 +2,7 @@ export default () => {
 	String.prototype.ucFirst = function() {
 		return this.slice(0, 1).toUpperCase() + this.slice(1);
 	};
+
 	String.prototype.lcFirst = function() {
 		return this.slice(0, 1).toLowerCase() + this.slice(1);
 	};
@@ -41,24 +42,22 @@ export default () => {
 	(original => (
 		/** @param chars */
 		String.prototype.trimLeft = function trimLeft(chars = null) {
-			if(!chars) {
+			if(!chars && original) {
 				return original.apply(this);
 			}
 
-			// noinspection JSRemoveUnnecessaryParentheses
-			return this.replace(new RegExp(`^[${RegExp.quote(chars)}]+`, 'g'), '')
+			return this.replace(new RegExp(`^${chars ? `[${RegExp.quote(chars)}]` : '\s'}+`, 'g'), '')
 		}
 	))(String.prototype.trimLeft);
 
 	(original => (
-		/** @param chars */
+		/** @param {*} chars */
 		String.prototype.trimRight = function trimRight(chars = null) {
-			if(!chars) {
+			if(!chars && original) {
 				return original.apply(this);
 			}
 
-			// noinspection JSRemoveUnnecessaryParentheses
-			return this.replace(new RegExp(`[${RegExp.quote(chars)}]+$`, 'g'), '')
+			return this.replace(new RegExp(`${chars ? `[${RegExp.quote(chars)}]` : '\s'}+$`, 'g'), '')
 		}
 	))(String.prototype.trimRight);
 
@@ -68,26 +67,26 @@ export default () => {
 	// https://github.com/uxitten/polyfill/blob/master/string.polyfill.js
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padEnd
-	if (!String.prototype.padStart || !String.prototype.padEnd) {
+	if(!String.prototype.padStart || !String.prototype.padEnd) {
 		const strPad = function strPad(string, targetLength, padString = ' ', isStart = true) {
 			targetLength = targetLength >> 0; //floor if number or convert non-number to 0;
 			padString = String(padString);
 
 			if(string.length > targetLength) {
 				return String(string);
-			} else {
-				targetLength = targetLength - string.length;
-
-				if(targetLength > padString.length) {
-					padString += padString.repeat(targetLength / padString.length); //append to original to ensure we are longer than needed
-				}
-
-				if(isStart) {
-					return padString.slice(0, targetLength) + String(string);
-				} else {
-					return String(string) + padString.slice(0, targetLength);
-				}
 			}
+
+			targetLength = targetLength - string.length;
+
+			if(targetLength > padString.length) {
+				padString += padString.repeat(targetLength / padString.length); //append to original to ensure we are longer than needed
+			}
+
+			if(isStart) {
+				return padString.slice(0, targetLength) + String(string);
+			}
+
+			return String(string) + padString.slice(0, targetLength);
 		};
 
 		String.prototype.padStart = function padStart(targetLength, padString = ' ') {
@@ -105,7 +104,7 @@ export default () => {
 	 * @return {*}
 	 */
 	String.prototype.trim = function trim(chars = null) {
-		return this.trimLeft(chars).trimRight(chars);
+		return this.trimStart(chars).trimEnd(chars);
 	};
 
 	String.prototype.has = function(substring) {

@@ -6,6 +6,9 @@
   "main": "code/application.jsx",
   "author": "Jack D. Taylor",
   "license": "MIT",
+  "scripts": {
+    "build": "webpack-here code/application.jsx compiled/application.js"
+  },
   "dependencies": {
     "bluebird": "^3.7.2",
     "file-saver": "^2.0.2",
@@ -13,5 +16,8 @@
     "querystring": "^0.2.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
+  },
+  "devDependencies": {
+    "webpack-here": "^1.2.2"
   }
 }

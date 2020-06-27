@@ -1,12 +1,17 @@
-export default () => {
-	// Fix IDE's `someprop` in not defined in `global`
-	if(0) global.global = {};
+import JsxReactUtils from "../base/JsxReactUtils";
 
+// Fix IDE's `someprop` in not defined in `global`
+if(0) {
+	// noinspection JSValidateTypes
+	global.global = {};
+}
+
+export default () => {
+	const React = JsxReactUtils.dependency("react");
 	global.keys = Object.keys;
 
-	// console.log("Including react");
-	global.React = global.React || global.JsxUtilsDependencies["react"];
-	global.___ = global.React && global.React.Fragment;
+	global.React = React;
+	global.___ = React && React.Fragment;
 
 	global.compare = function(a, b) {
 		if(a == b) {
@@ -15,6 +20,7 @@ export default () => {
 
 		return (a > b) ? 1 : -1;
 	};
+
 	global.compareProp = function(fn) {
 		if(valueType(fn) == String) {
 			fn = (k => x => x[k])(fn);
@@ -49,6 +55,7 @@ export default () => {
 		descriptor.enumerable = false;
 		return descriptor;
 	};
+
 	global.enumerable = function(proto, field, descriptor) {
 		descriptor.enumerable = true;
 		return descriptor;

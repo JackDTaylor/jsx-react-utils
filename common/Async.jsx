@@ -1,5 +1,7 @@
+import JsxReactUtils from "../base/JsxReactUtils";
+
 export default () => {
-	const Bluebird = global.JsxUtilsDependencies["bluebird"];
+	const Bluebird = JsxReactUtils.dependency("bluebird");
 
 	global.Bluebird = Bluebird;
 	global.Promise = Bluebird;

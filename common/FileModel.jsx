@@ -1,5 +1,7 @@
+import JsxReactUtils from "../base/JsxReactUtils";
+
 export default () => {
-	const saveAs = global.JsxUtilsDependencies["file-saver"];
+	const saveAs = JsxReactUtils.dependency("file-saver");
 
 	const base64ToArrayBuffer = function(base64) {
 		const binary = window.atob(base64);

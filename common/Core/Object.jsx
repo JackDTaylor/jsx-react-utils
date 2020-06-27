@@ -1,4 +1,8 @@
+import JsxReactUtils from "../../base/JsxReactUtils";
+
 export default () => {
+	const React = JsxReactUtils.dependency("react");
+
 	Object.without = function(obj, keysToRemove) {
 		if(keysToRemove instanceof Array === false) {
 			keysToRemove = [keysToRemove];
@@ -84,7 +88,7 @@ export default () => {
 			}
 
 			// noinspection JSUnresolvedVariable,JSUnresolvedFunction
-			let isReact = global.React && React.isValidElement(a) && React.isValidElement(b);
+			let isReact = React && React.isValidElement(a) && React.isValidElement(b);
 
 			for(const key of aKeys) {
 				if(key in b == false) {

@@ -1,4 +1,10 @@
-export default (cfg) => {
+import JsxReactUtils from "../base/JsxReactUtils";
+
+export default () => {
+	const React = JsxReactUtils.dependency("react");
+
+	const cssNamespace = JsxReactUtils.config('cssNamespace');
+
 	const USE_NEW_LIFECYCLE_METHODS = (([major, minor]) => {
 		// noinspection JSValidateTypes
 		return major > 16 || (major == 16 && minor >= 9)
@@ -15,17 +21,19 @@ export default (cfg) => {
 			.filter(x=>x)
 			.join(' ');
 	};
-	const classToClassname    = function(cls, isComponent = true) {
+
+	const classToClassname = function(cls, isComponent = true) {
 		if(typeof cls == 'object') {
 			cls = classObjToClassname(cls);
 		} else if(isComponent) {
 			cls = cls.replace(camelHumpRegex, '$1-$2');
 			cls = cls.toLowerCase();
-			cls = `${ReactComponentPrefix}-${cls}`;
+			cls = `${cssNamespace}-${cls}`;
 		}
 
 		return cls;
 	};
+
 	const rawClassname        = cls => classToClassname(cls, false);
 	const componentClassname  = cls => classToClassname(cls, true);
 
@@ -154,16 +162,16 @@ export default (cfg) => {
 			}
 
 			const result = {
-				className: ReactComponentPrefix + ' ' + (
+				className: cssNamespace + ' ' + (
 					this.cssClass
-						.map(componentClassname)                          // Convert `SomeClass` to `{ReactComponentPrefix}-some-class`
-						.concat(additionalClasses)                        // Add `additionalClasses`
-						.concat([this.props.className])                   // Add `props.className`
-						.filter(x=>x && x.trim() != ReactComponentPrefix) // Remove empty classes and `ReactComponentPrefix` occurrences
-						.unique()                                         // Remove duplicates
-						.join(' ')                                        // Join everything into a string
-						.replace(/\s+/, ' ')                              // Collapse spaces
-						.trim()                                           // Trim spaces from begin and end
+						.map(componentClassname)                  // Convert `SomeClass` to `{cssNamespace}-some-class`
+						.concat(additionalClasses)                // Add `additionalClasses`
+						.concat([this.props.className])           // Add `props.className`
+						.filter(x=>x && x.trim() != cssNamespace) // Remove empty classes and `cssNamespace` occurrences
+						.unique()                                 // Remove duplicates
+						.join(' ')                                // Join everything into a string
+						.replace(/\s+/, ' ')                      // Collapse spaces
+						.trim()                                   // Trim spaces from begin and end
 				),
 				...this.traitProps
 			};
@@ -319,7 +327,7 @@ export default (cfg) => {
 		asyncPromise = null;
 
 		renderAsyncLoader() {
-			return <div className={`${ReactComponentPrefix} ${ReactComponentPrefix}-block-loader`} />;
+			return <div className={`${cssNamespace} ${cssNamespace}-block-loader`} />;
 		}
 
 		_callPrepare() {

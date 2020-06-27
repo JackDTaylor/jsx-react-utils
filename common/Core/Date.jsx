@@ -468,7 +468,7 @@ export default () => {
 
 	// This weird "sort of inheritance" is needed because babel throws an error when class is
 	// used as a function, whereas the Date "class" can be invoked this way: `x = Date(...)`
-	// Also it defines it in the way that PHPStorm autocomplete is correctly reads both custom
+	// Also it defines it in the way that PHPStorm's autocomplete is correctly reads both custom
 	// and default methods of Date.
 	ClassUtils.applyMixin(global.Date, _Date => @reactified class Date {
 		static utcRegex = /^\d+-\d+-\d+T\d+:\d+:\d+\.\d+Z$/;

@@ -1,6 +1,8 @@
+import JsxReactUtils from "../base/JsxReactUtils";
+
 export default () => {
-	const jQuery      = global.JsxUtilsDependencies["jquery"];
-	const querystring = global.JsxUtilsDependencies["querystring"];
+	const jQuery      = JsxReactUtils.dependency("jquery");
+	const querystring = JsxReactUtils.dependency("querystring");
 
 	if('URL' in window == false) {
 		window.URL = {};

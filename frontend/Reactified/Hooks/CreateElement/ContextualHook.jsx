@@ -1,63 +1,68 @@
 import AbstractCreateElementHook from "./AbstractCreateElementHook";
+import JsxReactUtils from "../../../../base/JsxReactUtils";
 
-export default () => new class ContextualHook extends AbstractCreateElementHook {
-	condition() {
-		return this.element && this.element.IsContexted && !(this.props && this.props.isContexted);
-	}
+export default () => {
+	const React = JsxReactUtils.dependency("react");
 
-	prepareConsumerProps(baseProps) {
-		const props = {};
-
-		if(baseProps && 'key' in baseProps) {
-			props.key = baseProps.key;
+	return new class ContextualHook extends AbstractCreateElementHook {
+		condition() {
+			return this.element && this.element.IsContexted && !(this.props && this.props.isContexted);
 		}
 
-		return props;
-	}
+		prepareConsumerProps(baseProps) {
+			const props = {};
 
-	prepareComponentProps(baseProps, consumedContext) {
-		const props = {...baseProps, consumedContext, isContexted: true};
-
-		// noinspection JSUnresolvedVariable
-		if(props.nonContextable) {
-			props.consumedContext = null;
-			delete props.nonContextable;
-		}
-
-		if(props.contextualRef) {
-			const newRef = props.contextualRef;
-			const oldRef = props.ref || (x => x);
-
-			delete props.contextualRef;
-
-			props.ref = function() {
-				oldRef.apply(this, arguments);
-				newRef.apply(this, arguments);
-			};
-		}
-
-		return props;
-	}
-
-	action() {
-		const {element: Component, props, children} = this;
-		const Consumer = this.element.ContextConsumer;
-
-		const consumerProps = this.prepareConsumerProps(props);
-
-		const handler = (consumedContext) => {
-			const componentProps = this.prepareComponentProps(props, consumedContext);
-			const result = React.createElement(Component, componentProps, ...children);
-
-			if(Component.ContextualRender) {
-				return Component.ContextualRender(result, consumedContext, {props, children});
+			if(baseProps && 'key' in baseProps) {
+				props.key = baseProps.key;
 			}
 
-			return result;
-		};
+			return props;
+		}
 
-		return (
-			<Consumer {...consumerProps}>{handler}</Consumer>
-		);
+		prepareComponentProps(baseProps, consumedContext) {
+			const props = {...baseProps, consumedContext, isContexted: true};
+
+			// noinspection JSUnresolvedVariable
+			if(props.nonContextable) {
+				props.consumedContext = null;
+				delete props.nonContextable;
+			}
+
+			if(props.contextualRef) {
+				const newRef = props.contextualRef;
+				const oldRef = props.ref || (x => x);
+
+				delete props.contextualRef;
+
+				props.ref = function() {
+					oldRef.apply(this, arguments);
+					newRef.apply(this, arguments);
+				};
+			}
+
+			return props;
+		}
+
+		action() {
+			const {element: Component, props, children} = this;
+			const Consumer = this.element.ContextConsumer;
+
+			const consumerProps = this.prepareConsumerProps(props);
+
+			const handler = (consumedContext) => {
+				const componentProps = this.prepareComponentProps(props, consumedContext);
+				const result = React.createElement(Component, componentProps, ...children);
+
+				if(Component.ContextualRender) {
+					return Component.ContextualRender(result, consumedContext, {props, children});
+				}
+
+				return result;
+			};
+
+			return (
+				<Consumer {...consumerProps}>{handler}</Consumer>
+			);
+		}
 	}
-}
+};

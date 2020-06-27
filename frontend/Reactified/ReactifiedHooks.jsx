@@ -1,6 +1,9 @@
+import JsxReactUtils from "../../base/JsxReactUtils";
 import CreateElementHooks from "./Hooks/ReactHooks";
 
 export default () => {
+	const React = JsxReactUtils.dependency("react");
+
 	const createElementHooks = CreateElementHooks();
 
 	React.createElement = (originalCall => function(element, props, ...children) {
