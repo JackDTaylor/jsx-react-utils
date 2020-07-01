@@ -16,11 +16,11 @@ The easiest way so solve this is to place `jsx-react-utils` imports and initiali
 
 **jsx-react-utils.jsx**:
 ```js
-import initCommon from "jsx-react-utils/common";
-import initFrontend from "jsx-react-utils/frontend";
+import jsxReactUtils from "jsx-react-utils";
 
-initCommon({/* Dependencies go here */});
-initFrontend({/* Dependencies go here */});
+jsxReactUtils(['common', 'frontend'], {
+	dependencies: {/* dependencies (see below) */}
+});
 ```
 
 **your-entry-point.jsx**:
@@ -38,6 +38,7 @@ import "./Components/MyOtherComponent";
 You have to provide default exports from the dependent packages. You should import them manually in any way you want,
 e.g. separate `vendor.min.js` file, direct imports like in example below or from your favorite CDN via `<script>` tags.
 
+**jsx-react-utils.jsx**:
 ```js
 import React from "react";
 import Bluebird from "bluebird";
@@ -45,18 +46,16 @@ import jQuery from "jquery";
 import querystring from "querystring";
 import fileSaver from "file-saver";
 
-import initCommon from "jsx-react-utils/common";
-import initFrontend from "jsx-react-utils/frontend";
+import jsxReactUtils from "jsx-react-utils";
 
-(cfg => {
-	initCommon(cfg);
-	initFrontend(cfg);
-})({
-	"react":       React,
-	"bluebird":    Bluebird,
-	"jquery":      jQuery,
-	"querystring": querystring,
-	"file-saver":  fileSaver,
+jsxReactUtils(['common', 'frontend'], {
+	dependencies: {
+		"react":       React,
+		"bluebird":    Bluebird,
+		"jquery":      jQuery,
+		"querystring": querystring,
+		"file-saver":  fileSaver,
+	}
 });
 ```
 
@@ -64,7 +63,7 @@ You can pass `null` or an empty/non-empty object if you don't plan on using corr
 
 Features which require particular packages are described below:
 - **react**       &ndash; Essential dependency for `frontend` module. You can omit this dependency if you use `common` module only.
-- **bluebird**    &ndash; Essential for any async functionality both in `common` and `frontend` modules.
+- **bluebird**    &ndash; Essential for any async functionality both in `common` and `frontend` modules. If omitted, vanilla `Promise` will be used.
 - **jquery**      &ndash; Required only for `URL.fetch` and `URL.fetchRaw` functions.
 - **querystring** &ndash; Required only for `URL.build` and `URL.parseQuery` functions.
 - **file-saver**  &ndash; Required only for `FileModel.download` method. You may pass your own function of the same signature.
@@ -75,6 +74,13 @@ This module can be used both in backend and frontend environment.
 
 #### frontend
 This module is supposed to be used in frontend environment, but you can use it on backend as well (e.g. in universal/isomorphic application), just make sure to pass React dependency.
+
+### Configuration
+There are few configuration options available at the moment:
+
+- **`cssNamespace`**`{String}` ReactComponent's CSS classes prefix 
+- **`dependencies`**`{Object}` Dependencies, key is the package name, value is it's default export
+- **`log`**`{Object}`          Allows you to configure some components' log level 
 
 ### Documentation
 Sadly, no documentation yet :c
