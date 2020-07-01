@@ -8,7 +8,7 @@ export default () => {
 		@state error = null;
 
 		componentDidCatch(error, info) {
-			if(JsxReactUtils.config('errorBoundary.logErrors')) {
+			if(JsxReactUtils.config('log.errorBoundary.logOnError')) {
 				console.error(info);
 			}
 

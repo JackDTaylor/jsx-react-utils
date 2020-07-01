@@ -79,7 +79,7 @@ export default () => {
 						// heard of could've cleared things up a bit if you did find it. But you probably didn't.
 						//
 						// ...but if you did, you now have my official permission to report the issue at https://github.com/JackDTaylor/jsx-react-utils/issues/new
-						if(JsxReactUtils.config('log.decorators.state.warnOnStateInit')) {
+						if(JsxReactUtils.config('log.stateDecorator.warnOnStateInit')) {
 							console.warn(
 								`${this.constructor.name}.${field}: Initializing empty state in @state decorator getter. ` +
 								'This may lead to warnings like "Cannot assign to state not in constructor".\n' +
