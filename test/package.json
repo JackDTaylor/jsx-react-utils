@@ -15,9 +15,8 @@
     "jquery": "^3.5.1",
     "querystring": "^0.2.0",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "webpack-here": "^1.2.3"
   },
-  "devDependencies": {
-    "webpack-here": "^1.2.2"
-  }
+  "devDependencies": {}
 }

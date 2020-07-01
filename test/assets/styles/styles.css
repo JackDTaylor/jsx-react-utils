@@ -1,4 +1,99 @@
-.dmi-application {
-  color: red;
+html {
+  font-size: 13px;
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Roboto, Open Sans, Helvetica Neue, "Noto Sans Armenian", "Noto Sans Bengali", "Noto Sans Cherokee", "Noto Sans Devanagari", "Noto Sans Ethiopic", "Noto Sans Georgian", "Noto Sans Hebrew", "Noto Sans Kannada", "Noto Sans Khmer", "Noto Sans Lao", "Noto Sans Osmanya", "Noto Sans Tamil", "Noto Sans Telugu", "Noto Sans Thai", sans-serif;
+}
+.jx-test-group {
+  display: flex;
+  flex-direction: column-reverse;
+}
+.jx-test-group > .content {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.jx-test-group > .content .jx-smoke-test {
+  position: relative;
+  width: 320px;
+  height: 120px;
+  box-sizing: border-box;
+  border: 1px solid #cccccc;
+  margin: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 25px 10px 10px;
+  justify-content: center;
+}
+.jx-test-group > .content .jx-smoke-test .test-name,
+.jx-test-group > .content .jx-smoke-test .test-status {
+  font-size: 1rem;
+  position: absolute;
+  top: 0.33rem;
+  opacity: 0.33;
+}
+.jx-test-group > .content .jx-smoke-test .test-name.test-name,
+.jx-test-group > .content .jx-smoke-test .test-status.test-name {
+  left: 0.33rem;
+}
+.jx-test-group > .content .jx-smoke-test .test-name.test-status,
+.jx-test-group > .content .jx-smoke-test .test-status.test-status {
+  right: 0.33rem;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+.jx-test-group > .content .jx-smoke-test.js--passed {
+  background-color: #559900;
+  color: white;
+}
+.jx-test-group > .content .jx-smoke-test.js--failed {
+  background-color: #ca2c02;
+  color: white;
+}
+.jx-test-group > .content .jx-smoke-test.jx-state-decorator-test {
+  font-size: 3em;
+  flex-direction: row;
+}
+.jx-test-group > .content .jx-smoke-test.jx-state-decorator-test button {
+  font-size: inherit;
+  width: 1.25em;
+  height: 1.25em;
+}
+.jx-test-group > .content .jx-smoke-test.jx-state-decorator-test b {
+  display: inline-block;
+  margin: 0 1em;
+}
+.jx-test-group > .content .jx-smoke-test.jx-reactified-array-test a {
+  color: #0c6c99;
+  cursor: pointer;
+  text-decoration: underline dotted;
+}
+.jx-test-group > .content .jx-smoke-test.jx-reactified-array-test a:link,
+.jx-test-group > .content .jx-smoke-test.jx-reactified-array-test a:visited,
+.jx-test-group > .content .jx-smoke-test.jx-reactified-array-test a:hover,
+.jx-test-group > .content .jx-smoke-test.jx-reactified-array-test a:active {
+  color: #3c93be;
+}
+.jx-test-group > .content:empty:before {
+  content: 'All tests passed';
+  font-size: 13px;
+  padding: 0.75em;
+  width: 100%;
+  text-align: center;
+  color: #ccc;
+}
+.jx-test-group > .content:empty + .name {
+  font-size: 18px;
+  line-height: 21px;
+}
+.jx-test-group > .name {
+  font-size: 24px;
+  line-height: 30px;
+  margin-top: 0.5em;
+  margin-bottom: 0.25em;
+  text-align: center;
 }
 /*# sourceMappingURL=styles.css.map */

@@ -1,7 +1,8 @@
 import jsxReactUtils from "../../index";
 import {React, Bluebird, jQuery, querystring, fileSaver} from "./vendor";
 
-jsxReactUtils(['common', 'frontend'], {
+window.JRU = jsxReactUtils(['common', 'frontend'], {
+	cssNamespace: 'jx',
 	dependencies: {
 		"file-saver":  fileSaver,
 		"react":       React,
