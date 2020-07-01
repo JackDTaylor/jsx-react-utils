@@ -60,11 +60,11 @@ export default () => {
 
 				if ( newAnchor ) {
 					if ( this.anchorPoint !== undefined ) {
-						this.points.push(new Geometry2D.Point(this.anchorPoint.x, this.anchorPoint.y));
+						this.points.push(new Geometry.Vector2(this.anchorPoint.x, this.anchorPoint.y));
 					}
-					this.anchorPoint = new Geometry2D.Point(x, y);
+					this.anchorPoint = new Geometry.Vector2(x, y);
 				} else {
-					this.points.push(new Geometry2D.Point(x, y));
+					this.points.push(new Geometry.Vector2(x, y));
 				}
 			}
 

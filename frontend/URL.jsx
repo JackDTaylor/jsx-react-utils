@@ -27,6 +27,7 @@ export default () => {
 
 
 	class URLData {
+		/** @type {HTMLAnchorElement} */
 		parser = null;
 
 		protocol = '';
@@ -109,85 +110,86 @@ export default () => {
 		}
 
 		const handler = function(resolve, reject, onCancel) {
-				let request = null;
+			/** @type {JQuery.jqXHR} */
+			let request = null;
 
-				const ajaxHandler = (...args) => safeResolve(function(xhr, status) {
-					if(abortStatuses.has(status)) {
-						// Do something?
-					}
-
-					if(errorStatuses.has(status)) {
-						if(xhr.status && xhr.responseJSON) {
-							let error = null;
-
-							if(xhr.responseJSON.meta) {
-								let meta = xhr.responseJSON.meta;
-								let errorConstructor = meta.$error;
-
-								if(global[errorConstructor]) {
-									errorConstructor = global[errorConstructor];
-
-									try {
-										error = new errorConstructor(...meta.$args);
-									} catch(_e) {
-										console.error(_e);
-									}
-								}
-							}
-
-							if(error == null) {
-								error = new ApiError(xhr.responseJSON.errorMessage, xhr.status);
-							}
-
-							reject(error);
-							return;
-						}
-
-						// retry
-						if(--config.executionAttempts > 0) {
-							return jQuery.ajax(config);
-						}
-
-						reject(new Error({
-							nocontent:   'Получен пустой ответ от сервера',
-							error:       'Ошибка при обработке запроса',
-							timeout:     'Превышен интервал ожидания запроса',
-							parsererror: 'Не удалось прочитать ответ сервера',
-						}[status] || status));
-					}
-
-					if(status == "notmodified") {
-						console.warn('NOTMODIFIED', xhr);
-					}
-
-					if(successStatuses.has(status)) {
-						switch(outputFormat) {
-							case 'json': return resolve(xhr.responseJSON);
-							case 'text': return resolve(xhr.responseText);
-						}
-
-						return resolve(xhr.response);
-					}
-
-					reject(new Error("Unable to resolve a promise for unknown reason"));
-				}, reject, ...args);
-
-				if(method != RequestType.GET && valueType(body) != String) {
-					body = JSON.stringify(body);
+			const ajaxHandler = (...args) => safeResolve(function(xhr, status) {
+				if(abortStatuses.has(status)) {
+					// Do something?
 				}
 
-				let config = {
-					url, method,
-					data: body,
-					dataType: 'json',
-					contentType: 'application/json',
-					complete: ajaxHandler,
-					executionAttempts: 5
-				};
+				if(errorStatuses.has(status)) {
+					if(xhr.status && xhr.responseJSON) {
+						let error = null;
 
-				request = jQuery.ajax(config);
+						if(xhr.responseJSON.meta) {
+							let meta = xhr.responseJSON.meta;
+							let errorConstructor = meta.$error;
 
-				onCancel(() => request.abort());
+							if(global[errorConstructor]) {
+								errorConstructor = global[errorConstructor];
+
+								try {
+									error = new errorConstructor(...meta.$args);
+								} catch(_e) {
+									console.error(_e);
+								}
+							}
+						}
+
+						if(error == null) {
+							error = new ApiError(xhr.responseJSON['errorMessage'], xhr.status);
+						}
+
+						reject(error);
+						return;
+					}
+
+					// retry
+					if(--config.executionAttempts > 0) {
+						return jQuery.ajax(config);
+					}
+
+					reject(new Error({
+						nocontent:   'Получен пустой ответ от сервера',
+						error:       'Ошибка при обработке запроса',
+						timeout:     'Превышен интервал ожидания запроса',
+						parsererror: 'Не удалось прочитать ответ сервера',
+					}[status] || status));
+				}
+
+				if(status == "notmodified") {
+					console.warn('NOTMODIFIED', xhr);
+				}
+
+				if(successStatuses.has(status)) {
+					switch(outputFormat) {
+						case 'json': return resolve(xhr.responseJSON);
+						case 'text': return resolve(xhr.responseText);
+					}
+
+					return resolve(xhr.response);
+				}
+
+				reject(new Error("Unable to resolve a promise for unknown reason"));
+			}, reject, ...args);
+
+			if(method != RequestType.GET && valueType(body) != String) {
+				body = JSON.stringify(body);
+			}
+
+			let config = {
+				url, method,
+				data: body,
+				dataType: 'json',
+				contentType: 'application/json',
+				complete: ajaxHandler,
+				executionAttempts: 5
+			};
+
+			request = jQuery.ajax(config);
+
+			onCancel(() => request.abort());
 		};
 
 		return new Bluebird(handler);
@@ -207,7 +209,7 @@ export default () => {
 				...config
 			};
 			let request = jQuery.ajax(config);
-			onCancel(fn => request.abort());
+			onCancel(() => request.abort());
 		});
 	};
 }

@@ -94,19 +94,23 @@ export default () => {
 					}
 				}
 			} else {
-				this.single.nominative    = nomSingular;
-				this.single.genitive      = genSingular;
-				this.single.dative        = datSingular;
-				this.single.accusative    = accSingular;
-				this.single.ablative      = ablSingular;
-				this.single.prepositional = preSingular;
+				this.single = {
+					nominative:    nomSingular,
+					genitive:      genSingular,
+					dative:        datSingular,
+					accusative:    accSingular,
+					ablative:      ablSingular,
+					prepositional: preSingular,
+				};
 
-				this.plural.nominative    = nomPlural;
-				this.plural.genitive      = genPlural;
-				this.plural.dative        = datPlural;
-				this.plural.accusative    = accPlural;
-				this.plural.ablative      = ablPlural;
-				this.plural.prepositional = prePlural;
+				this.plural = {
+					nominative:    nomPlural,
+					genitive:      genPlural,
+					dative:        datPlural,
+					accusative:    accPlural,
+					ablative:      ablPlural,
+					prepositional: prePlural,
+				};
 			}
 		}
 

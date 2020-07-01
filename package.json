@@ -7,6 +7,9 @@
     "type": "git",
     "url": "git+https://github.com/JackDTaylor/jsx-react-utils.git"
   },
+  "scripts": {
+    "test": "cd test && npm run build"
+  },
   "keywords": [
     "jsx",
     "react",

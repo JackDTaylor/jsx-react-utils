@@ -6,8 +6,7 @@ let idCounter = 1;
 let VOID = { $symbol:'VOID' };
 
 export default () => {
-	const Loading = JsxReactUtils.component('Loading', LoadingFn);
-	const ErrorSign = JsxReactUtils.component('ErrorSign', ErrorSignFn);
+	const React = JsxReactUtils.dependency("react");
 
 	return class PromiseRenderer extends React.PureComponent {
 		@prop promise;
@@ -44,6 +43,9 @@ export default () => {
 		}
 
 		render() {
+			const Loading = JsxReactUtils.component('Loading', LoadingFn);
+			const ErrorSign = JsxReactUtils.component('ErrorSign', ErrorSignFn);
+
 			if(this.error) {
 				return <ErrorSign error={this.error} />;
 			}

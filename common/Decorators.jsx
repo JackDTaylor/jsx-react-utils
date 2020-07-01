@@ -362,27 +362,86 @@ export default () => {
 		})
 	};
 
-	global.bound = function(proto, field, descriptor) {
-		let originalCall = DecoratorUtils.getInitialValue(proto, field, descriptor, () => {});
+	// /** @bound -- original implementation with endless loop on super calls */
+	// global.bound = function(proto, field, descriptor) {
+	// 	let originalCall = DecoratorUtils.getInitialValue(proto, field, descriptor, () => {});
+	//
+	// 	if(originalCall instanceof Function == false) {
+	// 		console.error(`Value passed to \`@bound ${field}\` is not a function`);
+	// 	}
+	//
+	// 	let boundKey = `${field}$bound`;
+	//
+	// 	return (originalCall => ({
+	// 		configurable: descriptor.configurable,
+	// 		enumerable: descriptor.enumerable,
+	//
+	// 		get() {
+	// 			if(!this[boundKey]) {
+	// 				this[boundKey] = originalCall.bind(this);
+	// 			}
+	//
+	// 			return this[boundKey];
+	// 		}
+	// 	}))(originalCall);
+	// };
+
+	/**
+	 * `bound` decorator borrowed from `autobind-decorator` package
+	 *
+	 * @param proto
+	 * @param field
+	 * @param descriptor
+	 * @returns {Object}
+	 *
+	 * @author https://github.com/andreypopp/autobind-decorator
+	 * @licence MIT License https://github.com/andreypopp/autobind-decorator/blob/master/LICENCE
+	 * @copyright Copyright (c) Andrey Popp
+	 */
+	global.bound = function bound(proto, field, descriptor) {
+		let originalCall = DecoratorUtils.getInitialValue(proto, field, descriptor);
 
 		if(originalCall instanceof Function == false) {
 			console.error(`Value passed to \`@bound ${field}\` is not a function`);
 		}
 
-		let boundKey = `${field}$bound`;
+		// In IE11 calling Object.defineProperty has a side-effect of evaluating the
+		// getter for the property which is being replaced. This causes infinite
+		// recursion and an "Out of stack space" error.
+		let definingProperty = false;
 
-		return (originalCall => ({
-			configurable: descriptor.configurable,
-			enumerable: descriptor.enumerable,
+		return {
+			configurable: true,
 
 			get() {
-				if(!this[boundKey]) {
-					this[boundKey] = originalCall.bind(this);
+				if(definingProperty || this === proto.prototype || this.hasOwnProperty(field) || originalCall instanceof Function == false) {
+					return originalCall;
 				}
 
-				return this[boundKey];
+				const boundFn = originalCall.bind(this);
+
+				definingProperty = true;
+				Object.defineProperty(this, field, {
+					configurable: true,
+
+					get() {
+						return boundFn;
+					},
+
+					set(value) {
+						originalCall = value;
+						delete this[field];
+					}
+				});
+				definingProperty = false;
+
+				return boundFn;
+			},
+
+			set(value) {
+				originalCall = value;
 			}
-		}))(originalCall);
+		};
 	};
 
 	/**

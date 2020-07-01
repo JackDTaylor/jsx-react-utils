@@ -10,15 +10,15 @@ export default () => {
 			}
 
 			if(!undefinedOrNull(point.lng)) {
-				return new Geometry2D.Point(+point.lng, +point.lat);
+				return new Geometry.Vector2(+point.lng, +point.lat);
 			}
 
 			if(!undefinedOrNull(point.x)) {
-				return new Geometry2D.Point(+point.x, +point.y);
+				return new Geometry.Vector2(+point.x, +point.y);
 			}
 
 			if(point instanceof Array && point.length > 1) {
-				return new Geometry2D.Point(+point[1], +point[0]);
+				return new Geometry.Vector2(+point[1], +point[0]);
 			}
 
 			console.warn('Geo.Point2D unable to parse coordinates:', point);
@@ -46,7 +46,7 @@ export default () => {
 		}
 
 		/**
-		 * Returns distance in meters
+		 * Returns distance in meters between two geo-coordinates
 		 * @param from
 		 * @param to
 		 */

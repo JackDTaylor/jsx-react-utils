@@ -8,11 +8,11 @@ export default class MaxLengthValidator extends Validator {
 		this.maxLength = maxLength;
 	}
 
-	validate(value, params) {
+	validate(value) {
 		return `${value}`.length <= this.maxLength;
 	}
 
-	message(p) {
+	message() {
 		return `Превышена максимально допустимая длина в ${'символ'.plural(this.maxLength)}`;
 	}
 }

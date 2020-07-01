@@ -4,9 +4,7 @@ import LinkFn from "./Link";
 export default () => {
 	const cssNamespace = JsxReactUtils.config('cssNamespace');
 
-	const Link = JsxReactUtils.component('Link', LinkFn);
-
-	return class ArrayReactRenderer extends React.Component {
+	return class ArrayRenderer extends React.Component {
 		@prop limit = 2;
 		@prop array;
 
@@ -29,6 +27,8 @@ export default () => {
 		}
 
 		renderExpandButton(overflow) {
+			const Link = JsxReactUtils.component('Link', LinkFn);
+
 			if(!overflow) {
 				return '';
 			}
@@ -54,7 +54,7 @@ export default () => {
 			return (
 				<___>
 					{array.map((item, i) => this.displayAsList ? (
-						<div className={`${cssNamespace}-array-item`} key={i}>{item}</div>
+						<div className={`${cssNamespace} ${cssNamespace}-array-item`} key={i}>{item}</div>
 					) : (
 						<___ key={i}>
 							{item}

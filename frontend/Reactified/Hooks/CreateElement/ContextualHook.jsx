@@ -28,7 +28,7 @@ export default () => {
 				delete props.nonContextable;
 			}
 
-			if(props.contextualRef) {
+			if('contextualRef' in props && props.contextualRef) {
 				const newRef = props.contextualRef;
 				const oldRef = props.ref || (x => x);
 

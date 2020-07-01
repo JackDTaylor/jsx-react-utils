@@ -44,12 +44,6 @@ class Cases extends BaseCases {
 
 class S {
 	/**
-	 * Sets encoding for using in morphos/* functions.
-	 */
-	static setEncoding(encoding) {
-	}
-
-	/**
 	 * Calcules count of characters in string.
 	 */
 	static strlen(string) {
@@ -64,20 +58,24 @@ class S {
 	}
 
 	/**
-	 * Lower case.
+	 * @param {String} string
+	 * @return {String}
 	 */
 	static lower(string) {
 		return string.toLowerCase();
 	}
+
 	/**
-	 * Upper case.
+	 * @param {String} string
+	 * @return {String}
 	 */
 	static upper(string) {
 		return string.toUpperCase();
 	}
 
 	/**
-	 * Name case. (ex: Thomas, Lewis)
+	 * @param {String} string
+	 * @return {*}
 	 */
 	static nameCase(string) {
 		return string.ucFirst();
@@ -108,6 +106,13 @@ class S {
 		return false;
 	}
 
+	/**
+	 * @param {String} string
+	 * @param {String} substring
+	 * @param {Boolean} caseSensetive
+	 * @param {Number} startOffset
+	 * @return {number}
+	 */
 	static indexOf(string, substring, caseSensetive = false, startOffset = 0)
 	{
 		if(caseSensetive == false) {
@@ -254,6 +259,7 @@ class RussianLanguage extends Cases {
 	 */
 	static consonants = ['б', 'в', 'г', 'д', 'ж', 'з', 'й', 'к', 'л', 'м', 'н', 'п', 'р', 'с', 'т', 'ф', 'х', 'ц', 'ч', 'ш', 'щ'];
 
+	// noinspection NonAsciiCharacters
 	/**
 	 * @var Object Пары согласных
 	 */
@@ -473,6 +479,24 @@ class RussianLanguage extends Cases {
 	static isAdjectiveNoun(noun) {
 		return ['ой', 'ий', 'ый', 'ая', 'ое', 'ее'].has(S.slice(noun, -2)) && noun != 'гений';
 	}
+
+	static isSoftLast(last, word) {
+		if(last == 'й') {
+			return true;
+		}
+
+		if(['ь', 'е', 'ё', 'ю', 'я'].has(last)) {
+			if(S.slice(word, -2, -1) == 'и') {
+				return true;
+			}
+
+			if(this.isConsonant(S.slice(word, -2, -1)) && !this.isHissingConsonant(S.slice(word, -2, -1))) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 }
 
 export class NounDeclension extends RussianLanguage {
@@ -480,6 +504,7 @@ export class NounDeclension extends RussianLanguage {
 	static SECOND_DECLENSION = 2;
 	static THIRD_DECLENSION = 3;
 
+	// noinspection NonAsciiCharacters
 	/**
 	 * These words has 2 declension type.
 	 */
@@ -732,7 +757,7 @@ export class NounDeclension extends RussianLanguage {
 		word = S.lower(word);
 
 		let last = S.slice(word, -1);
-		let soft_last = last == 'й' || (['ь', 'е', 'ё', 'ю', 'я'].has(last) && ((this.isConsonant(S.slice(word, -2, -1)) && !this.isHissingConsonant(S.slice(word, -2, -1))) || S.slice(word, -2, -1) == 'и'));
+		let soft_last = this.isSoftLast(last, word);
 		let prefix = this.getPrefixOfSecondDeclension(word, last);
 		let forms =  {[Cases.IMENIT]: word};
 
@@ -890,7 +915,7 @@ export class NounDeclension extends RussianLanguage {
 	/**
 	 * @param forms Object
 	 * @param animate
-	 * @return mixed
+	 * @return String
 	 */
 	static getVinitCaseByAnimateness(forms, animate) {
 		if(animate) {
@@ -920,273 +945,274 @@ export class NounDeclension extends RussianLanguage {
 }
 
 export class NounPluralization extends RussianLanguage {
-		static ONE = 1;
-		static TWO_FOUR = 2;
-		static FIVE_OTHER = 3;
+	static ONE = 1;
+	static TWO_FOUR = 2;
+	static FIVE_OTHER = 3;
 
-		static neuterExceptions = [
-			'поле',
-			'море',
-		];
+	static neuterExceptions = [
+		'поле',
+		'море',
+	];
 
-		static genitiveExceptions = {
-			'письмо': 'писем',
-			'пятно': 'пятен',
-			'кресло': 'кресел',
-			'коромысло': 'коромысел',
-			'ядро': 'ядер',
-			'блюдце': 'блюдец',
-			'полотенце': 'полотенец',
-		};
+	// noinspection NonAsciiCharacters
+	static genitiveExceptions = {
+		'письмо': 'писем',
+		'пятно': 'пятен',
+		'кресло': 'кресел',
+		'коромысло': 'коромысел',
+		'ядро': 'ядер',
+		'блюдце': 'блюдец',
+		'полотенце': 'полотенец',
+	};
 
-		static immutableWords = [
-			'евро',
-			'пенни',
-		];
+	static immutableWords = [
+		'евро',
+		'пенни',
+	];
 
-		static runawayVowelsExceptions = [
-			'писе*ц',
-			'песе*ц',
-			'глото*к',
-		];
+	static runawayVowelsExceptions = [
+		'писе*ц',
+		'песе*ц',
+		'глото*к',
+	];
 
-		static runawayVowelsNormalized = false;
+	static runawayVowelsNormalized = false;
 
-		static getRunAwayVowelsList() {
-			if(this.runawayVowelsNormalized === false) {
-				this.runawayVowelsNormalized = [];
+	static getRunAwayVowelsList() {
+		if(this.runawayVowelsNormalized === false) {
+			this.runawayVowelsNormalized = [];
 
-				for(const word of this.runawayVowelsExceptions) {
-					this.runawayVowelsNormalized[word.replace('*', '')] = S.indexOf(word, '*') - 1;
-				}
-			}
-			return this.runawayVowelsNormalized;
-		}
-
-		/**
-		 * Склонение существительного для сочетания с числом (кол-вом предметов).
-		 * @param count Количество предметов
-		 * @param word Название предмета
-		 * @param animateness Признак одушевленности
-		 * @return
-		 */
-		static pluralize(word, count = 2, animateness = false) {
-			// меняем местами аргументы, если они переданы в старом формате
-			if(typeof count == 'string' && typeof word == 'number') {
-				[count, word] = [word, count];
-			}
-
-			// для адъективных существительных правила склонения проще:
-			// только две формы
-			if(this.isAdjectiveNoun(word)) {
-				if(this.getNumeralForm(count) == this.ONE) {
-					return word;
-				} else {
-					return this.getCase(word, this.RODIT, animateness);
-				}
-			}
-
-			switch(this.getNumeralForm(count)) {
-				case this.ONE:
-					return word;
-				case this.TWO_FOUR:
-					return NounDeclension.getCase(word, this.RODIT, animateness);
-				case this.FIVE_OTHER:
-					return this.getCase(word, this.RODIT, animateness);
+			for(const word of this.runawayVowelsExceptions) {
+				this.runawayVowelsNormalized[word.replace('*', '')] = S.indexOf(word, '*') - 1;
 			}
 		}
+		return this.runawayVowelsNormalized;
+	}
 
-		/**
-		 * @param count
-		 * @return
-		 */
-		static getNumeralForm(count) {
-			if(count != Math.round(count)) {
-				if(count < 5) {
-					return this.TWO_FOUR;
-				}
+	/**
+	 * Склонение существительного для сочетания с числом (кол-вом предметов).
+	 * @param count Количество предметов
+	 * @param word Название предмета
+	 * @param animateness Признак одушевленности
+	 * @return
+	 */
+	static pluralize(word, count = 2, animateness = false) {
+		// меняем местами аргументы, если они переданы в старом формате
+		if(typeof count == 'string' && typeof word == 'number') {
+			[count, word] = [word, count];
+		}
 
-				count = Math.round(count);
-			}
-
-			if(count > 100) {
-				count %= 100;
-			}
-
-			let ending = count % 10;
-
-			if((count > 20 && ending == 1) || count == 1) {
-				return this.ONE;
-			} else if((count > 20 && [2,3,4].has(ending)) || [2,3,4].has(count)) {
-				return this.TWO_FOUR;
+		// для адъективных существительных правила склонения проще:
+		// только две формы
+		if(this.isAdjectiveNoun(word)) {
+			if(this.getNumeralForm(count) == this.ONE) {
+				return word;
 			} else {
-				return this.FIVE_OTHER;
+				return this.getCase(word, this.RODIT, animateness);
 			}
 		}
 
-		/**
-		 * @param word
-		 * @param caseId
-		 * @param animateness
-		 * @return
-		 */
-		static getCase(word, caseId, animateness = false) {
-			caseId = this.canonizeCase(caseId);
-			let forms = this.getCases(word, animateness);
-			return forms[caseId];
-		}
-
-		/**
-		 * @param word
-		 * @param animateness
-		 * @return
-		 */
-		static getCases(word, animateness = false) {
-			word = S.lower(word);
-
-			if(this.immutableWords.has(word)) {
-				return {
-					[this.IMENIT]:  word,
-					[this.RODIT]:   word,
-					[this.DAT]:     word,
-					[this.VINIT]:   word,
-					[this.TVORIT]:  word,
-					[this.PREDLOJ]: word,
-				};
-			}
-
-			// Адъективное склонение (Сущ, образованные от прилагательных и причастий) - прохожий, существительное
-			if(this.isAdjectiveNoun(word)) {
-				return this.declinateAdjective(word, animateness);
-			}
-
-			// Субстантивное склонение (существительные)
-			return this.declinateSubstative(word, animateness);
-		}
-
-		/**
-		 * Склонение обычных существительных.
-		 * @param word
-		 * @param animateness
-		 * @return
-		 */
-		static declinateSubstative(word, animateness) {
-			let prefix = S.slice(word, 0, -1);
-			let last = S.slice(word, -1);
-			let runawayVowelsList = this.getRunAwayVowelsList();
-
-			if(word in runawayVowelsList) {
-				let vowelOffset = runawayVowelsList[word];
-
-				word = S.slice(word, 0, vowelOffset) + S.slice(word, vowelOffset + 1);
-			}
-
-			let declension = NounDeclension.getDeclension(word);
-			let soft_last;
-
-			if(declension == NounDeclension.SECOND_DECLENSION) {
-				soft_last = last == 'й' || (['ь', 'е', 'ё', 'ю', 'я'].has(last) && ((this.isConsonant(S.slice(word, -2, -1)) && !this.isHissingConsonant(S.slice(word, -2, -1))) || S.slice(word, -2, -1) == 'и'));
-				prefix = NounDeclension.getPrefixOfSecondDeclension(word, last);
-			} else if(declension == NounDeclension.FIRST_DECLENSION) {
-				soft_last = this.checkLastConsonantSoftness(word);
-			} else {
-				soft_last = ['чь', 'сь', 'ть', 'нь'].has(S.slice(word, -2));
-			}
-
-			let forms = {};
-
-			if(last == 'ч' || ['чь', 'сь', 'ть', 'нь', 'ль'].has(S.slice(word, -2)) || (this.isVowel(last) && ['ч', 'к'].has(S.slice(word, -2, -1)))) { // before ч, чь, сь, ч+vowel, к+vowel
-				forms[Cases.IMENIT] = prefix + 'и';
-			} else if(['н', 'ц', 'р', 'т'].has(last)) {
-				forms[Cases.IMENIT] = prefix + 'ы';
-			} else {
-				forms[Cases.IMENIT] = this.chooseVowelAfterConsonant(last, soft_last, prefix + 'я', prefix + 'а');
-			}
-
-			// RODIT
-			if(word in this.genitiveExceptions) {
-				forms[Cases.RODIT] = this.genitiveExceptions[word];
-			} else if(['о', 'е'].has(last)) {
-				// exceptions
-				if(this.neuterExceptions.has(word)) {
-					forms[Cases.RODIT] = prefix + 'ей';
-				} else if(S.slice(word, -2, -1) == 'и') {
-					forms[Cases.RODIT] = prefix + 'й';
-				} else {
-					forms[Cases.RODIT] = prefix;
-				}
-			} else if(S.slice(word, -2) == 'ка') { // words ending with -ка: чашка, вилка, ложка, тарелка, копейка, батарейка
-				if(S.slice(word, -3, -2) == 'л') {
-					forms[Cases.RODIT] = S.slice(word, 0, -2) + 'ок';
-				} else if(S.slice(word, -3, -2) == 'й') {
-					forms[Cases.RODIT] = S.slice(word, 0, -3) + 'ек';
-				} else {
-					forms[Cases.RODIT] = S.slice(word, 0, -2) + 'ек';
-				}
-			} else if(['а'].has(last)) { // обида, ябеда
-				forms[Cases.RODIT] = prefix;
-			} else if(['я'].has(last)) { // молния
-				forms[Cases.RODIT] = prefix+'й';
-			} else if(this.isHissingConsonant(last) || (soft_last && last != 'й') || ['чь', 'сь', 'ть', 'нь'].has(S.slice(word, -2))) {
-				forms[Cases.RODIT] = prefix+'ей';
-			} else if(last == 'й' || S.slice(word, -2) == 'яц') { // месяц
-				forms[Cases.RODIT] = prefix+'ев';
-			} else { // (self::isConsonant($last) && !RussianLanguage::isHissingConsonant($last))
-				forms[Cases.RODIT] = prefix+'ов';
-			}
-
-			// DAT
-			forms[Cases.DAT] = this.chooseVowelAfterConsonant(
-				last,
-				soft_last && S.slice(word, -2, -1) != 'ч',
-				prefix+'ям',
-				prefix+ 'ам'
-			);
-
-			// VINIT
-			forms[Cases.VINIT] = NounDeclension.getVinitCaseByAnimateness(forms, animateness);
-			// TVORIT
-			// my personal rule
-			if(last == 'ь' && declension == NounDeclension.THIRD_DECLENSION && !['чь', 'сь', 'ть', 'нь'].has(S.slice(word, -2))) {
-				forms[Cases.TVORIT] = prefix + 'ми';
-			} else {
-				forms[Cases.TVORIT] = this.chooseVowelAfterConsonant(
-					last,
-					soft_last && S.slice(word, -2, -1) != 'ч',
-					prefix + 'ями',
-					prefix + 'ами'
-				);
-			}
-
-			// PREDLOJ
-			forms[Cases.PREDLOJ] = this.chooseVowelAfterConsonant(
-				last,
-				soft_last && S.slice(word, -2, -1) != 'ч',
-				prefix + 'ях',
-				prefix + 'ах'
-			);
-
-			return forms;
-		}
-
-		/**
-		 * Склонение существительных, образованных от прилагательных и причастий.
-		 * Rules are from http://rusgram.narod.ru/1216-1231.html
-		 * @param word
-		 * @param animateness
-		 * @return
-		 */
-		static declinateAdjective(word, animateness) {
-			let prefix = S.slice(word, 0, -2);
-			let vowel = this.isHissingConsonant(S.slice(prefix, -1)) ? 'и' : 'ы';
-
-			return {
-				[Cases.IMENIT]: prefix + vowel + 'е',
-				[Cases.RODIT]: prefix + vowel + 'х',
-				[Cases.DAT]: prefix + vowel + 'м',
-				[Cases.VINIT]: prefix + vowel + (animateness ? 'х' : 'е'),
-				[Cases.TVORIT]: prefix + vowel + 'ми',
-				[Cases.PREDLOJ]: prefix + vowel + 'х',
-			};
+		switch(this.getNumeralForm(count)) {
+			case this.ONE:
+				return word;
+			case this.TWO_FOUR:
+				return NounDeclension.getCase(word, this.RODIT, animateness);
+			case this.FIVE_OTHER:
+				return this.getCase(word, this.RODIT, animateness);
 		}
 	}
+
+	/**
+	 * @param count
+	 * @return
+	 */
+	static getNumeralForm(count) {
+		if(count != Math.round(count)) {
+			if(count < 5) {
+				return this.TWO_FOUR;
+			}
+
+			count = Math.round(count);
+		}
+
+		if(count > 100) {
+			count %= 100;
+		}
+
+		let ending = count % 10;
+
+		if((count > 20 && ending == 1) || count == 1) {
+			return this.ONE;
+		} else if((count > 20 && [2,3,4].has(ending)) || [2,3,4].has(count)) {
+			return this.TWO_FOUR;
+		} else {
+			return this.FIVE_OTHER;
+		}
+	}
+
+	/**
+	 * @param word
+	 * @param caseId
+	 * @param animateness
+	 * @return
+	 */
+	static getCase(word, caseId, animateness = false) {
+		caseId = this.canonizeCase(caseId);
+		let forms = this.getCases(word, animateness);
+		return forms[caseId];
+	}
+
+	/**
+	 * @param word
+	 * @param animateness
+	 * @return {NounCasesLong|*}
+	 */
+	static getCases(word, animateness = false) {
+		word = S.lower(word);
+
+		if(this.immutableWords.has(word)) {
+			return {
+				[this.IMENIT]:  word,
+				[this.RODIT]:   word,
+				[this.DAT]:     word,
+				[this.VINIT]:   word,
+				[this.TVORIT]:  word,
+				[this.PREDLOJ]: word,
+			};
+		}
+
+		// Адъективное склонение (Сущ, образованные от прилагательных и причастий) - прохожий, существительное
+		if(this.isAdjectiveNoun(word)) {
+			return this.declinateAdjective(word, animateness);
+		}
+
+		// Субстантивное склонение (существительные)
+		return this.declinateSubstative(word, animateness);
+	}
+
+	/**
+	 * Склонение обычных существительных.
+	 * @param word
+	 * @param animateness
+	 * @return
+	 */
+	static declinateSubstative(word, animateness) {
+		let prefix = S.slice(word, 0, -1);
+		let last = S.slice(word, -1);
+		let runawayVowelsList = this.getRunAwayVowelsList();
+
+		if(word in runawayVowelsList) {
+			let vowelOffset = runawayVowelsList[word];
+
+			word = S.slice(word, 0, vowelOffset) + S.slice(word, vowelOffset + 1);
+		}
+
+		let declension = NounDeclension.getDeclension(word);
+		let soft_last;
+
+		if(declension == NounDeclension.SECOND_DECLENSION) {
+			soft_last = this.isSoftLast(last, word);
+			prefix = NounDeclension.getPrefixOfSecondDeclension(word, last);
+		} else if(declension == NounDeclension.FIRST_DECLENSION) {
+			soft_last = this.checkLastConsonantSoftness(word);
+		} else {
+			soft_last = ['чь', 'сь', 'ть', 'нь'].has(S.slice(word, -2));
+		}
+
+		let forms = {};
+
+		if(last == 'ч' || ['чь', 'сь', 'ть', 'нь', 'ль'].has(S.slice(word, -2)) || (this.isVowel(last) && ['ч', 'к'].has(S.slice(word, -2, -1)))) { // before ч, чь, сь, ч+vowel, к+vowel
+			forms[Cases.IMENIT] = prefix + 'и';
+		} else if(['н', 'ц', 'р', 'т'].has(last)) {
+			forms[Cases.IMENIT] = prefix + 'ы';
+		} else {
+			forms[Cases.IMENIT] = this.chooseVowelAfterConsonant(last, soft_last, prefix + 'я', prefix + 'а');
+		}
+
+		// RODIT
+		if(word in this.genitiveExceptions) {
+			forms[Cases.RODIT] = this.genitiveExceptions[word];
+		} else if(['о', 'е'].has(last)) {
+			// exceptions
+			if(this.neuterExceptions.has(word)) {
+				forms[Cases.RODIT] = prefix + 'ей';
+			} else if(S.slice(word, -2, -1) == 'и') {
+				forms[Cases.RODIT] = prefix + 'й';
+			} else {
+				forms[Cases.RODIT] = prefix;
+			}
+		} else if(S.slice(word, -2) == 'ка') { // words ending with -ка: чашка, вилка, ложка, тарелка, копейка, батарейка
+			if(S.slice(word, -3, -2) == 'л') {
+				forms[Cases.RODIT] = S.slice(word, 0, -2) + 'ок';
+			} else if(S.slice(word, -3, -2) == 'й') {
+				forms[Cases.RODIT] = S.slice(word, 0, -3) + 'ек';
+			} else {
+				forms[Cases.RODIT] = S.slice(word, 0, -2) + 'ек';
+			}
+		} else if(['а'].has(last)) { // обида, ябеда
+			forms[Cases.RODIT] = prefix;
+		} else if(['я'].has(last)) { // молния
+			forms[Cases.RODIT] = prefix+'й';
+		} else if(this.isHissingConsonant(last) || (soft_last && last != 'й') || ['чь', 'сь', 'ть', 'нь'].has(S.slice(word, -2))) {
+			forms[Cases.RODIT] = prefix+'ей';
+		} else if(last == 'й' || S.slice(word, -2) == 'яц') { // месяц
+			forms[Cases.RODIT] = prefix+'ев';
+		} else { // (self::isConsonant($last) && !RussianLanguage::isHissingConsonant($last))
+			forms[Cases.RODIT] = prefix+'ов';
+		}
+
+		// DAT
+		forms[Cases.DAT] = this.chooseVowelAfterConsonant(
+			last,
+			soft_last && S.slice(word, -2, -1) != 'ч',
+			prefix+'ям',
+			prefix+ 'ам'
+		);
+
+		// VINIT
+		forms[Cases.VINIT] = NounDeclension.getVinitCaseByAnimateness(forms, animateness);
+		// TVORIT
+		// my personal rule
+		if(last == 'ь' && declension == NounDeclension.THIRD_DECLENSION && !['чь', 'сь', 'ть', 'нь'].has(S.slice(word, -2))) {
+			forms[Cases.TVORIT] = prefix + 'ми';
+		} else {
+			forms[Cases.TVORIT] = this.chooseVowelAfterConsonant(
+				last,
+				soft_last && S.slice(word, -2, -1) != 'ч',
+				prefix + 'ями',
+				prefix + 'ами'
+			);
+		}
+
+		// PREDLOJ
+		forms[Cases.PREDLOJ] = this.chooseVowelAfterConsonant(
+			last,
+			soft_last && S.slice(word, -2, -1) != 'ч',
+			prefix + 'ях',
+			prefix + 'ах'
+		);
+
+		return forms;
+	}
+
+	/**
+	 * Склонение существительных, образованных от прилагательных и причастий.
+	 * Rules are from http://rusgram.narod.ru/1216-1231.html
+	 * @param word
+	 * @param animateness
+	 * @return
+	 */
+	static declinateAdjective(word, animateness) {
+		let prefix = S.slice(word, 0, -2);
+		let vowel = this.isHissingConsonant(S.slice(prefix, -1)) ? 'и' : 'ы';
+
+		return {
+			[Cases.IMENIT]: prefix + vowel + 'е',
+			[Cases.RODIT]: prefix + vowel + 'х',
+			[Cases.DAT]: prefix + vowel + 'м',
+			[Cases.VINIT]: prefix + vowel + (animateness ? 'х' : 'е'),
+			[Cases.TVORIT]: prefix + vowel + 'ми',
+			[Cases.PREDLOJ]: prefix + vowel + 'х',
+		};
+	}
+}

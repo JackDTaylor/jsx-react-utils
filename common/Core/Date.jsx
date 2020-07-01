@@ -1,4 +1,9 @@
 export default () => {
+	/**
+	 * @param format
+	 * @param timestamp
+	 * @return {void | string | *}
+	 */
 	global.dateFormat = function dateFormat( format, timestamp ) {
 		// Format a local time/date
 		//
@@ -7,8 +12,12 @@ export default () => {
 		// +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
 		// +   improved by: MeEtc (http://yass.meetcweb.com)
 		// +   improved by: Brad Touesnard
+
 		let nowTimestamp = (new Date()).getTime();
+
+		// noinspection JSUnusedLocalSymbols
 		let a, jsdate = new Date(timestamp ? timestamp * 1000 : nowTimestamp);
+
 		let pad = function(n, c){
 			if( (n = n + "").length < c ) {
 				return new Array(++c - n.length).join("0") + n;
@@ -16,6 +25,7 @@ export default () => {
 				return n;
 			}
 		};
+
 		let txt_weekdays = ["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"];
 		let txt_ordin = {1:"st",2:"nd",3:"rd",21:"st",22:"nd",23:"rd",31:"st"};
 
@@ -25,33 +35,33 @@ export default () => {
 
 		let f = {
 			// Day
-			d: function(){
+			d: () => {
 				return pad(f.j(), 2);
 			},
-			D: function(){
+			D: () => {
 				return f.l().substr(0,3);
 			},
-			j: function(){
+			j: () => {
 				return jsdate.getDate();
 			},
-			l: function(){
+			l: () => {
 				return txt_weekdays[f.w()];
 			},
-			N: function(){
+			N: () => {
 				return f.w() + 1;
 			},
-			S: function(){
+			S: () => {
 				return txt_ordin[f.j()] ? txt_ordin[f.j()] : 'th';
 			},
-			w: function(){
+			w: () => {
 				return jsdate.getDay();
 			},
-			z: function(){
+			z: () => {
 				return (jsdate - new Date(jsdate.getFullYear() + "/1/1")) / 864e5 >> 0;
 			},
 
 			// Week
-			W: function(){
+			W: () => {
 				let a = f.z(), b = 364 + f.L() - a;
 				let nd2, nd = (new Date(jsdate.getFullYear() + "/1/1").getDay() || 7) - 1;
 
@@ -69,24 +79,24 @@ export default () => {
 			},
 
 			// Month
-			F: function(){
+			F: () => {
 				return txt_months_gen[f.n()];
 			},
-			M: function(){
+			M: () => {
 				//t = f.F(); return t.substr(0,3);
 				return txt_months_gen_short[f.n()];
 			},
 
-			f: function(){
+			f: () => {
 				return txt_months[f.n()];
 			},
-			m: function(){
+			m: () => {
 				return pad(f.n(), 2);
 			},
-			n: function(){
+			n: () => {
 				return jsdate.getMonth() + 1;
 			},
-			t: function(){
+			t: () => {
 				let n;
 				if( (n = jsdate.getMonth() + 1) == 2 ){
 					return 28 + f.L();
@@ -100,13 +110,13 @@ export default () => {
 			},
 
 			// Year
-			L: function(){
+			L: () => {
 				let y = f.Y();
 				// noinspection JSBitwiseOperatorUsage
 				return (!(y & 3) && (y % 1e2 || !(y % 4e2))) ? 1 : 0;
 			},
 			//o not supported yet
-			Y: function(){
+			Y: () => {
 				return jsdate.getFullYear();
 			},
 			y: function(){
@@ -114,13 +124,13 @@ export default () => {
 			},
 
 			// Time
-			a: function(){
+			a: () => {
 				return jsdate.getHours() > 11 ? "pm" : "am";
 			},
-			A: function(){
+			A: () => {
 				return f.a().toUpperCase();
 			},
-			B: function(){
+			B: () => {
 				// peter paul koch:
 				let off = (jsdate.getTimezoneOffset() + 60)*60;
 				let theSeconds = (jsdate.getHours() * 3600) +
@@ -133,22 +143,22 @@ export default () => {
 				if ((String(beat)).length == 2) beat = "0"+beat;
 				return beat;
 			},
-			g: function(){
+			g: () => {
 				return jsdate.getHours() % 12 || 12;
 			},
-			G: function(){
+			G: () => {
 				return jsdate.getHours();
 			},
-			h: function(){
+			h: () => {
 				return pad(f.g(), 2);
 			},
-			H: function(){
+			H: () => {
 				return pad(jsdate.getHours(), 2);
 			},
-			i: function(){
+			i: () => {
 				return pad(jsdate.getMinutes(), 2);
 			},
-			s: function(){
+			s: () => {
 				return pad(jsdate.getSeconds(), 2);
 			},
 			//u not supported yet
@@ -156,12 +166,12 @@ export default () => {
 			// Timezone
 			//e not supported yet
 			//I not supported yet
-			O: function(){
+			O: () => {
 				let t = pad(Math.abs(jsdate.getTimezoneOffset()/60*100), 4);
 				if (jsdate.getTimezoneOffset() > 0) t = "-" + t; else t = "+" + t;
 				return t;
 			},
-			P: function(){
+			P: () => {
 				let O = f.O();
 				return (O.substr(0, 3) + ":" + O.substr(3, 2));
 			},
@@ -169,11 +179,11 @@ export default () => {
 			//Z not supported yet
 
 			// Full Date/Time
-			c: function(){
+			c: () => {
 				return f.Y() + "-" + f.m() + "-" + f.d() + "T" + f.h() + ":" + f.i() + ":" + f.s() + f.P();
 			},
 			//r not supported yet
-			U: function(){
+			U: () => {
 				return Math.round(jsdate.getTime()/1000);
 			}
 		};
@@ -242,17 +252,20 @@ export default () => {
 			/^(\d{1,4})([\-\.\/\:])(\d{1,2})([\-\.\/\:])(\d{1,4})(?:\s(\d{1,2}):(\d{2})?:?(\d{2})?)?(?:\s([A-Z]+)?)?$/);
 
 		if (match && match[2] === match[4]) {
+			const getTimestampFromDate = (year, month, date, hours, minutes, seconds, ms) => {
+				if (month > 12 || date > 31) {
+					return fail;
+				}
+
+				return new Date(year, parseInt(month, 10) - 1, date, hours || 0, minutes || 0, seconds || 0, ms || 0) / 1000;
+			};
+
 			if (match[1] > 1901) {
 				switch (match[2]) {
 					case '-':
 					{
 						// YYYY-M-D
-						if (match[3] > 12 || match[5] > 31) {
-							return fail;
-						}
-
-						return new Date(match[1], parseInt(match[3], 10) - 1, match[5],
-							match[6] || 0, match[7] || 0, match[8] || 0, match[9] || 0) / 1000;
+						return getTimestampFromDate(match[1], match[3], match[5], match[6], match[7], match[8], match[9]);
 					}
 					case '.':
 					{
@@ -262,12 +275,7 @@ export default () => {
 					case '/':
 					{
 						// YYYY/M/D
-						if (match[3] > 12 || match[5] > 31) {
-							return fail;
-						}
-
-						return new Date(match[1], parseInt(match[3], 10) - 1, match[5],
-							match[6] || 0, match[7] || 0, match[8] || 0, match[9] || 0) / 1000;
+						return getTimestampFromDate(match[1], match[3], match[5], match[6], match[7], match[8], match[9]);
 					}
 				}
 			} else if (match[5] > 1901) {
@@ -275,32 +283,17 @@ export default () => {
 					case '-':
 					{
 						// D-M-YYYY
-						if (match[3] > 12 || match[1] > 31) {
-							return fail;
-						}
-
-						return new Date(match[5], parseInt(match[3], 10) - 1, match[1],
-							match[6] || 0, match[7] || 0, match[8] || 0, match[9] || 0) / 1000;
+						return getTimestampFromDate(match[5], match[3], match[1], match[6], match[7], match[8], match[9]);
 					}
 					case '.':
 					{
 						// D.M.YYYY
-						if (match[3] > 12 || match[1] > 31) {
-							return fail;
-						}
-
-						return new Date(match[5], parseInt(match[3], 10) - 1, match[1],
-							match[6] || 0, match[7] || 0, match[8] || 0, match[9] || 0) / 1000;
+						return getTimestampFromDate(match[5], match[3], match[1], match[6], match[7], match[8], match[9]);
 					}
 					case '/':
 					{
 						// M/D/YYYY
-						if (match[1] > 12 || match[3] > 31) {
-							return fail;
-						}
-
-						return new Date(match[5], parseInt(match[1], 10) - 1, match[3],
-							match[6] || 0, match[7] || 0, match[8] || 0, match[9] || 0) / 1000;
+						return getTimestampFromDate(match[5], match[1], match[3], match[6], match[7], match[8], match[9]);
 					}
 				}
 			} else {
@@ -321,12 +314,7 @@ export default () => {
 						// D.M.YY or H.MM.SS
 						if (match[5] >= 70) {
 							// D.M.YY
-							if (match[3] > 12 || match[1] > 31) {
-								return fail;
-							}
-
-							return new Date(match[5], parseInt(match[3], 10) - 1, match[1],
-								match[6] || 0, match[7] || 0, match[8] || 0, match[9] || 0) / 1000;
+							return getTimestampFromDate(match[5], match[3], match[1], match[6], match[7], match[8], match[9]);
 						}
 						if (match[5] < 60 && !match[6]) {
 							// H.MM.SS
@@ -415,7 +403,7 @@ export default () => {
 		}
 
 		function process(val) {
-			let splt = val.split(' '), // Todo: Reconcile this with regex using \s, taking into account browser issues with split and regexes
+			let splt = val.split(' '), // TODO: Reconcile this with regex using \s, taking into account browser issues with split and regexes
 				type = splt[0],
 				range = splt[1].substring(0, 3),
 				typeIsNumber = /\d+/.test(type),
@@ -473,7 +461,10 @@ export default () => {
 	ClassUtils.applyMixin(global.Date, _Date => @reactified class Date {
 		static utcRegex = /^\d+-\d+-\d+T\d+:\d+:\d+\.\d+Z$/;
 
-		constructor(...a) {}
+		/**
+		 * @param args {*[]}
+		 */
+		constructor(...args) {}
 
 		static filterInRange(columnBasename, date = new _Date()) {
 			return {
@@ -648,55 +639,66 @@ export default () => {
 			return this.daysDiff(new _Date('2000-01-01'));
 		}
 
+		/** @return {Date} */
 		get week() {
 			let day = this.day;
 			return day.subtract(day.dayOfWeek * Time.DAY);
 		}
 
+		/** @return {Date} */
 		get month() {
 			let result = this.day;
 			result.setDate(1);
 			return result;
 		}
 
+		/** @return {Date} */
 		get year() {
 			let result = this.month;
 			result.setMonth(0);
 			return result;
 		}
 
+		/** @return {Date} */
 		get prevDay() {
 			return this.day.subtract(Time.DAY);
 		}
 
+		/** @return {Date} */
 		get prevWeek() {
 			return this.week.subtract(Time.WEEK);
 		}
 
+		/** @return {Date} */
 		get prevMonth() {
 			return this.month.subtract(Time.SECOND).month;
 		}
+		/** @return {Date} */
 		get prevYear() {
 			return this.year.subtract(Time.SECOND).year;
 		}
 
+		/** @return {Date} */
 		get nextDay() {
 			return this.day.add(Time.DAY);
 		}
 
+		/** @return {Date} */
 		get nextWeek() {
 			return this.week.add(Time.WEEK);
 		}
 
+		/** @return {Date} */
 		get nextMonth() {
 			let result = this.month;
 			result.setMonth(result.getMonth() + 1);
 			return result;
 		}
 
+		/** @return {Date} */
 		get nextYear() {
 			let result = this.year;
-			result.setYear(result.getYear() + 1900 + 1);
+			result.setFullYear(result.getFullYear() + 1900 + 1);
 			return result;
 		}
 

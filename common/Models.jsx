@@ -23,22 +23,13 @@ export default () => {
 	 * @returns {string}
 	 */
 	global.idPropertyNameFromFull = function idPropertyNameFromFull(propertyName) {
-		let found = false;
-
-		idPropertyNameFromFullRules.some(rule => {
+		for(const rule of idPropertyNameFromFullRules) {
 			if(rule.regex.test(propertyName)) {
-				found = true;
-				propertyName = propertyName.replace(rule.regex, rule.suffix);
+				return propertyName.replace(rule.regex, rule.suffix);
 			}
-
-			return found;
-		});
-
-		if(!found) {
-			return `${propertyName}_id`;
 		}
 
-		return propertyName;
+		return `${propertyName}_id`;
 	};
 
 	/**
@@ -51,16 +42,11 @@ export default () => {
 	 * @returns {string}
 	 */
 	global.fullPropertyNameFromId = function fullPropertyNameFromId(propertyName) {
-		let found = false;
-
-		fullPropertyNameFromIdRules.some(rule => {
+		for(const rule of fullPropertyNameFromIdRules) {
 			if(rule.regex.test(propertyName)) {
-				found = true;
-				propertyName = propertyName.replace(rule.regex, rule.suffix);
+				return propertyName.replace(rule.regex, rule.suffix);
 			}
-
-			return found;
-		});
+		}
 
 		return propertyName;
 	};

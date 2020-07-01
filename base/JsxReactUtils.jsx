@@ -1,32 +1,44 @@
 export default class JsxReactUtils {
-	static instance;
+	static _instance;
 
-	static get Instance() {
-		if(!this.instance) {
-			this.instance = new this;
+	static get instance() {
+		if(!this._instance) {
+			this._instance = new this;
 		}
 
-		return this.instance;
+		return this._instance;
 	}
 
 	static addConfig(...args) {
-		return this.Instance.addConfig(...args);
+		return this.instance.addConfig(...args);
+	}
+
+	static registerComponent(name, implementationFn) {
+		return this.addConfig({
+			components: {
+				[name]: implementationFn
+			},
+		});
 	}
 
 	static require(...args) {
-		return this.Instance.require(...args);
+		return this.instance.require(...args);
 	}
 
 	static dependency(...args) {
-		return this.Instance.dependency(...args);
+		return this.instance.dependency(...args);
 	}
 
 	static component(...args) {
-		return this.Instance.component(...args);
+		return this.instance.component(...args);
 	}
 
 	static config(...args) {
-		return this.Instance.config(...args);
+		return this.instance.config(...args);
+	}
+
+	static init(...args) {
+		return this.instance.init(...args);
 	}
 
 	componentCache = {};
@@ -36,6 +48,7 @@ export default class JsxReactUtils {
 		dependencies: {},
 		components: {},
 	};
+
 
 	/**
 	 * Merges passed config with stored one
@@ -78,7 +91,7 @@ export default class JsxReactUtils {
 
 	component(component, defaultImplementation) {
 		if(component in this.componentCache == false) {
-			this.componentCache[component] = this.config(`component.${module}`, x => x)(defaultImplementation());
+			this.componentCache[component] = this.config(`components.${component}`, x => x)(defaultImplementation());
 		}
 
 		return this.componentCache[component];
@@ -105,4 +118,6 @@ export default class JsxReactUtils {
 
 		return value;
 	}
+
+	init() {}
 }

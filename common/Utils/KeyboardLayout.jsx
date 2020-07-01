@@ -1,5 +1,5 @@
 export default () => {
-	global.KeyboardLayout = class KeyboardLayout {
+	class KeyboardLayout {
 		// noinspection NonAsciiCharacters
 		static Layouts = [{
 			'~':'Ё', '`':'ё', '@':'"', '#':'№', 'q':'й', 'w':'ц', 'e':'у', 'r':'к',
@@ -26,7 +26,7 @@ export default () => {
 		}];
 
 		static Invert(string, stickyMode = false) {
-			let activeLayouts = this.Layouts;
+			let activeLayouts = KeyboardLayout.Layouts;
 
 			return `${string}`.split('').map(char => {
 				activeLayouts.some(layout => {
@@ -44,5 +44,7 @@ export default () => {
 				return char;
 			}).join('');
 		}
-	};
+	}
+
+	global.KeyboardLayout = KeyboardLayout;
 }

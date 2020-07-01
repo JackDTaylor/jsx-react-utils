@@ -1,8 +1,8 @@
 export default () => {
 	global.Animate = class Animate {
-		static async Worker(step, onComplete = fn=>{}) {
+		static async Worker(step, onComplete = ()=>{}) {
 			let stop = false;
-			const stopper = x => stop = true;
+			const stopper = () => stop = true;
 			let timePassed = 0;
 
 			while(timePassed < global.MAX_ANIMATION_TIME || 120000) {
@@ -20,6 +20,16 @@ export default () => {
 			// console.log('Animation complete in ', timePassed, 'ms');
 		}
 
+		/**
+		 *
+		 * @param handler {{get,set,getTargetValue}|Array}
+		 * @param targetValue
+		 * @param time
+		 * @param precision
+		 * @param maxSpeed
+		 * @return {Promise<void>}
+		 * @constructor
+		 */
 		static async SmoothDamp(handler, targetValue, time = 500, precision = 0.01, maxSpeed = Infinity) {
 			const sd = {};
 

@@ -1,9 +1,8 @@
 import JsxReactUtils from "../../base/JsxReactUtils";
-import PromiseRendererFn from "./Components/PromiseRenderer";
+import PromiseRendererFn from "./../Components/Reactified/PromiseRenderer";
 
 export default () => {
 	const React = JsxReactUtils.dependency("react");
-	const PromiseRenderer = JsxReactUtils.component('PromiseRenderer', PromiseRendererFn);
 
 	const processedPrototypes = [];
 	const processPromisePrototype = function(PromisePrototype) {
@@ -24,6 +23,8 @@ export default () => {
 				if(this.isFulfilled()) {
 					return this.value();
 				}
+
+				const PromiseRenderer = JsxReactUtils.component('PromiseRenderer', PromiseRendererFn);
 
 				return <PromiseRenderer promise={this} />;
 			}

@@ -65,6 +65,10 @@ export default () => {
 		sql;
 		bindings;
 
+		/**
+		 * @param builder {{compiled:{sql,bindings}}}
+		 * @param error {{sqlMessage,sqlMessage,_code,errno,sqlState}}
+		 */
 		constructor(builder, error) {
 			super('SQL Error: ' + error.sqlMessage);
 

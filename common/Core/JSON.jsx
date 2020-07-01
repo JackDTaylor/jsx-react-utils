@@ -39,12 +39,17 @@ export default () => {
 	JSON.asyncFrom = async function(object, definition = {}) {
 		if(definition instanceof Array) {
 			object = object || [];
-			if(!object.mapAsyncConcurrent) console.warn('JSON.asyncFrom object has no mapAsyncConcurrent', object);
+
+			if(!object.mapAsyncConcurrent) {
+				console.warn('JSON.asyncFrom object has no mapAsyncConcurrent', object);
+			}
+
 			return await object.mapAsyncConcurrent(async item => await JSON.asyncFrom(item, definition[0]));
 		}
 
 		if(valueType(definition) != Object) {
 			if(definition instanceof Function && definition.fromJSON) {
+				// noinspection ES6RedundantAwait (Class.fromJSON() can be both sync and async)
 				return await definition.fromJSON(object);
 			}
 

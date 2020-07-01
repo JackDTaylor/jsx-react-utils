@@ -1,3 +1,5 @@
+import JsxReactUtils from "./base/JsxReactUtils";
+
 import common from "./common";
 import frontend from "./frontend"
 
@@ -9,4 +11,8 @@ export default function importJsxReactUtils(modules = ['common', 'frontend'], co
 			availableModules[module](config);
 		}
 	}
+
+
+
+	return JsxReactUtils.init();
 }

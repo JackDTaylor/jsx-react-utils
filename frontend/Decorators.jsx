@@ -1,3 +1,10 @@
+/**
+ * @typedef PropertyDescriptorWithInitializer
+ * @extends PropertyDescriptor
+ * @property initializer {Function}
+ */
+import JsxReactUtils from "../base/JsxReactUtils";
+
 export default () => {
 	global.StateProperty = class StateProperty {
 		constructor(config = {}) {
@@ -66,11 +73,20 @@ export default () => {
 
 				if(!this.state || field in this.state == false) {
 					if(!this.state) {
-						console.warn(
-							'Initializing empty state in @state decorator getter. ' +
-							'This may lead to warnings like "You cannot assign to state not in constructor". ' +
-							'Make sure your `this.state` object was initialized if you want to use state with this component'
-						);
+						// I'm pretty sure this led to some pretty severe errors and warnings before, but now I haven't been able to
+						// find the error message even in React sources themselves. So it's either I gone insane after all or
+						// you may face the same error and this non-documented and disabled by default config option you've never
+						// heard of could've cleared things up a bit if you did find it. But you probably didn't.
+						//
+						// ...but if you did, you now have my official permission to report the issue at https://github.com/JackDTaylor/jsx-react-utils/issues/new
+						if(JsxReactUtils.config('log.decorators.state.warnOnStateInit')) {
+							console.warn(
+								`${this.constructor.name}.${field}: Initializing empty state in @state decorator getter. ` +
+								'This may lead to warnings like "Cannot assign to state not in constructor".\n' +
+								'Make sure your `this.state` object was initialized before using @state-decorated properties ' +
+								'if you want to use state with this component'
+							);
+						}
 
 						this.state = {};
 					}
@@ -105,7 +121,7 @@ export default () => {
 					this.state$deferredPromise = null;
 				}
 
-				this.state$deferredPromise = delay().then(fn => this.state$applyDeferred());
+				this.state$deferredPromise = delay().then(() => this.state$applyDeferred());
 			}
 		};
 	};
