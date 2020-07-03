@@ -369,7 +369,10 @@ export default () => {
 			this._willUnmount = true;
 
 			if(this.asyncPromise) {
-				this.asyncPromise.cancel();
+				if(isBluebirdPromise()) {
+					this.asyncPromise.cancel();
+				}
+
 				this.asyncPromise = null;
 			}
 

@@ -3,15 +3,25 @@ import JsxReactUtils from "../base/JsxReactUtils";
 export default () => {
 	const Bluebird = JsxReactUtils.dependency("bluebird");
 
-	global.Bluebird = Bluebird;
-	global.Promise = Bluebird;
+	global.Bluebird = Bluebird || global.Promise;
+	global.Promise = global.Bluebird;
 
-	global.Bluebird.config({
-		cancellation: true,
-		warnings: false,
-		longStackTraces: false,
-		monitoring: false
-	});
+	if(Bluebird?.config) {
+		JsxReactUtils.isBluebirdAvailable = true;
+
+		Bluebird.config({
+			cancellation: true,
+			warnings: false,
+			longStackTraces: false,
+			monitoring: false
+		});
+	} else {
+		JsxReactUtils.isBluebirdAvailable = false;
+
+		if(JsxReactUtils.config('log.dependencyWarnings')) {
+			console.warn('JsxReactUtils.Async was unable to resolve "bluebird" dependency, vanilla `Promise` was used.');
+		}
+	}
 
 	global.delay = function delay(timeout = 0) {
 		if(valueType(timeout) == Function) {
@@ -28,7 +38,7 @@ export default () => {
 				}
 			}, timeout);
 
-			onCancel(() => clearTimeout(id));
+			onCancel && onCancel(() => clearTimeout(id));
 		});
 	};
 
@@ -62,13 +72,16 @@ export default () => {
 	};
 
 	global.awaitImmediate = function awaitImmediate(val, resolver) {
-		if(val instanceof Bluebird && val.isFulfilled()) {
+		if(isBluebirdPromise(val) && val.isFulfilled()) {
 			resolver(val.value());
 			return true;
-		} else if(isPromise(val) == false) {
+		}
+
+		if(isPromise(val) == false) {
 			resolver(val);
 			return true;
 		}
+
 		// Either a regular promise or not resolved Bluebird
 		val.then(resolver);
 		return false;

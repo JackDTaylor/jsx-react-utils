@@ -25,13 +25,30 @@ export default () => {
 
 		// console.log('Proto UID', field, ObjectUID(proto), proto);
 
-		let originalCWU = proto.componentWillUnmount || (() => {});
+		const cancelPromise = promise => {
+			if(!promise) {
+				return;
+			}
 
-		proto.componentWillUnmount = function() {
+			if(!isBluebirdPromise(promise)) {
+				if(JsxReactUtils.config('log.vanillaPromiseUsageWarnings')) {
+					console.warn(
+						'JsxReactUtils @state decorator was unable to cancel state update promise. '+
+						'You should either use Bluebird, don\'t use @state decorator or be ready for any kind of weird issues.'
+					);
+				}
+
+				return;
+			}
+
+			promise.cancel();
+		};
+
+		proto.componentWillUnmount = (originalCall => function() {
 			this.state$componentIsUnmounting = true;
 
-			return originalCWU.apply(this, arguments);
-		};
+			return originalCall.apply(this, arguments);
+		})(proto.componentWillUnmount || (() => {}));
 
 		proto.state$initDeferred = function state$initDeferred() {
 			if('state$deferred' in this == false) {
@@ -55,10 +72,8 @@ export default () => {
 		};
 
 		proto.commitState = function() {
-			if(this.state$deferredPromise) {
-				this.state$deferredPromise.cancel();
-				this.state$deferredPromise = null;
-			}
+			cancelPromise(this.state$deferredPromise);
+			this.state$deferredPromise = null;
 
 			this.state$applyDeferred();
 		};
@@ -116,10 +131,7 @@ export default () => {
 				this.stateHash = `${this.stateHash}`.md5();
 				this.state$deferred[field] = value;
 
-				if(this.state$deferredPromise) {
-					this.state$deferredPromise.cancel();
-					this.state$deferredPromise = null;
-				}
+				cancelPromise(this.state$deferredPromise);
 
 				this.state$deferredPromise = delay().then(() => this.state$applyDeferred());
 			}

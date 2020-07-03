@@ -1,4 +1,11 @@
 export default class JsxReactUtils {
+	// Symbols
+	static AUTO_RESOLVE = {$symbol: 'JRU_AUTO_RESOLVE'};
+
+	// Flags
+	static isBluebirdAvailable = undefined;
+
+	// Static
 	static _instance;
 
 	static get instance() {
@@ -45,10 +52,26 @@ export default class JsxReactUtils {
 	_config = {
 		cssNamespace: 'dmi',
 
-		dependencies: {},
+		dependencies: {
+			"react":       JsxReactUtils.AUTO_RESOLVE,
+			"bluebird":    JsxReactUtils.AUTO_RESOLVE,
+			"jquery":      JsxReactUtils.AUTO_RESOLVE,
+			"querystring": JsxReactUtils.AUTO_RESOLVE,
+			"file-saver":  JsxReactUtils.AUTO_RESOLVE,
+		},
 		components: {},
+
+		log: {
+			dependencyWarnings: true,
+			vanillaPromiseUsageWarnings: true,
+		},
 	};
 
+	moduleResolvers = {
+		"react":       () => global.React,
+		"bluebird":    () => global.Bluebird || global.Promise,
+		"jquery":      () => global.jQuery || global.$,
+	};
 
 	/**
 	 * Merges passed config with stored one
@@ -67,6 +90,11 @@ export default class JsxReactUtils {
 			components: {
 				...this._config.components,
 				...(config.components || {})
+			},
+
+			log: {
+				...this._config.log,
+				...(config.log || {})
 			}
 		};
 	}
@@ -86,7 +114,21 @@ export default class JsxReactUtils {
 	}
 
 	dependency(module) {
-		return this.config(`dependencies.${module}`);
+		let result = this.config(`dependencies.${module}`);
+
+		if(result === JsxReactUtils.AUTO_RESOLVE) {
+			const resolver = this.moduleResolvers[module] || (() => null);
+
+			result = resolver() || null;
+
+			if(!result) {
+				if(this.config('log.dependencyWarnings')) {
+					console.warn('JsxReactUtils was unable to resolve dependency "' + module + '". You can disable auto-resolve by explicitly providing `null` in dependency config.');
+				}
+			}
+		}
+
+		return result;
 	}
 
 	component(component, defaultImplementation) {

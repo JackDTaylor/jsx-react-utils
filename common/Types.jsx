@@ -114,4 +114,8 @@ export default () => {
 
 		return value instanceof Promise;
 	};
+
+	global.isBluebirdPromise = function(value) {
+		return isPromise(value) && value.isFulfilled && value.cancel;
+	}
 }

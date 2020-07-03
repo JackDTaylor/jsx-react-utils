@@ -1,9 +1,20 @@
+import JsxReactUtils from "../base/JsxReactUtils";
 import ErrorBoundaryFn from "./Components/ReactComponent/ErrorBoundary";
 import ReactTraitFn from "./Components/ReactComponent/ReactTrait";
 import ReactComponentFn from "./Components/ReactComponent/ReactComponent";
 import ContextConsumerFn from "./Components/ReactComponent/ContextConsumer";
 
 export default () => {
+	const React = JsxReactUtils.dependency("react");
+
+	if(!React) {
+		if(JsxReactUtils.config('log.dependencyWarnings')) {
+			console.warn('JsxReactUtils.ReactComponent requires "react" dependency.');
+		}
+
+		return;
+	}
+
 	/**
 	 * Attaches trait to ReactComponent-based component
 	 *

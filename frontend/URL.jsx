@@ -189,7 +189,7 @@ export default () => {
 
 			request = jQuery.ajax(config);
 
-			onCancel(() => request.abort());
+			onCancel && onCancel(() => request.abort());
 		};
 
 		return new Bluebird(handler);
@@ -209,7 +209,8 @@ export default () => {
 				...config
 			};
 			let request = jQuery.ajax(config);
-			onCancel(() => request.abort());
+
+			onCancel && onCancel(() => request.abort());
 		});
 	};
 }

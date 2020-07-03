@@ -118,7 +118,7 @@ export default () => {
 				if(type != this.REPLY && timeout) {
 					timeoutId = setTimeout(() => reject(`Envoy request timed out: ${id}`), timeout);
 
-					onCancel(() => clearTimeout(timeoutId));
+					onCancel && onCancel(() => clearTimeout(timeoutId));
 				}
 
 				this.activeRequests[id] = { data, resolve, reject, timeoutId };

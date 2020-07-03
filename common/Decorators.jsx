@@ -1,3 +1,5 @@
+import JsxReactUtils from "../base/JsxReactUtils";
+
 export default () => {
 	global.DecoratorUtils = class DecoratorUtils {
 		static defineKey(key, container, value = {}) {
@@ -463,6 +465,10 @@ export default () => {
 	 *   Calls:   CCCCCCCCCCC###
 	 */
 	global.solo = function(_delay = 0) {
+		if(JsxReactUtils.isBluebirdAvailable == false) {
+			throw new Error('JsxReactUtils @solo decorator requires "bluebird" dependency');
+		}
+
 		_delay = arguments.length < 2 ? _delay : 0;
 
 		const decorator = function(proto, field, descriptor) {
@@ -478,7 +484,11 @@ export default () => {
 				enumerable: descriptor.enumerable,
 
 				value(...args) {
-					if(this[promiseKey] && this[promiseKey].cancel) {
+					if(this[promiseKey]) {
+						if(!isBluebirdPromise(this[promiseKey])) {
+							throw new Error('Promise received by @solo decorator is not a Bluebird promise');
+						}
+
 						this[promiseKey].cancel();
 					}
 
@@ -512,6 +522,10 @@ export default () => {
 	 *            ^^^^
 	 */
 	global.cooldown = function(interval = 33) {
+		if(JsxReactUtils.isBluebirdAvailable == false) {
+			throw new Error('JsxReactUtils @cooldown decorator requires "bluebird" dependency');
+		}
+
 		interval = arguments.length < 2 ? interval : 33;
 
 		const decorator = function(proto, field, descriptor) {
@@ -531,6 +545,10 @@ export default () => {
 					const date = Date.now();
 
 					if(this[promiseKey]) {
+						if(!isBluebirdPromise(this[promiseKey])) {
+							throw new Error('Promise received by @solo decorator is not a Bluebird promise');
+						}
+
 						this[promiseKey].cancel();
 					}
 

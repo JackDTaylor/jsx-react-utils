@@ -1,4 +1,8 @@
+import JsxReactUtils from "../../base/JsxReactUtils";
+
 export default () => {
+	const Bluebird = JsxReactUtils.dependency("bluebird");
+
 	const arrayFn = function(name, value) {
 		Object.defineProperty(Array.prototype, name, { enumerable: false, configurable: true, value });
 	};
@@ -114,7 +118,7 @@ export default () => {
 	/** @class Array
 	 *  @property forEachAsyncConcurrent */
 	arrayFn('forEachAsyncConcurrent', async function(callback) {
-		await global.Bluebird.all(this.map(callback));
+		await Bluebird.all(this.map(callback));
 	});
 
 	/** @class Array
