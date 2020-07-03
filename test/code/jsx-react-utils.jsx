@@ -1,13 +1,17 @@
 import jsxReactUtils from "../../index";
-import {React, Bluebird, jQuery, querystring, fileSaver} from "./vendor";
+// import {React, Bluebird, jQuery, querystring, fileSaver} from "./vendor";
 
-window.JRU = jsxReactUtils(['common', 'frontend'], {
+jsxReactUtils({
 	cssNamespace: 'jx',
 	dependencies: {
-		"file-saver":  fileSaver,
-		"react":       React,
-		"bluebird":    Bluebird,
-		"jquery":      jQuery,
-		"querystring": querystring,
+		// "react":       React,
+		// "bluebird":    Bluebird,
+		"jquery":      null,
+		"file-saver":  null,
+		"querystring": null,
 	}
+	// log: false,
+	// log: {
+	// 	vanillaPromiseUsageWarnings: false,
+	// },
 });
